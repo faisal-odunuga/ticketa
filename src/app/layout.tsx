@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Providers from "@/hooks/Providers";
+import Providers from "@/state/Providers";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Ticketa",
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={``}>
         <Providers>{children}</Providers>
+        <ToastContainer />
       </body>
     </html>
   );

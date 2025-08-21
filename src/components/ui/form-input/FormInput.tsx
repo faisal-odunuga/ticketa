@@ -21,16 +21,28 @@ const FormInput = ({
   return (
     <div className={`w-full space-y-1 ${boxStyle}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700">
+        <label
+          className="block text-sm font-medium text-gray-700"
+          htmlFor={others?.id}
+        >
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
       <div className="relative">
         <input
+          suppressHydrationWarning
           className={`w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm ${inputStyle}`}
-          type={isPasswordType ? (isPassword ? "password" : "text") : "text"}
+          type={
+            isPasswordType
+              ? isPassword
+                ? "password"
+                : "text"
+              : others.type || "text"
+          }
+          required={required}
           {...others}
         />
+
         {isPasswordType && (
           <span
             onClick={() => setIsPassword(!isPassword)}

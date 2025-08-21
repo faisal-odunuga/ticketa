@@ -47,3 +47,10 @@ export const getFeaturedEvents = (
     .sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
   return featuredEvents;
 };
+
+export const getInitials = (name: string) => {
+  return name
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("");
+};

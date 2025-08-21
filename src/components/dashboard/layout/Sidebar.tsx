@@ -1,16 +1,25 @@
-import { dashboardMenu } from "@/app/dashboard/(links)/allLinks";
+import { dashboardMenu } from "@/lib/allLinks";
+import { signOut } from "@/services/apiAuth";
 import classNames from "classnames";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { FaSignOutAlt } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import { toast } from "react-toastify";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
   setSidebarOpen: (isSidebarOpen: boolean) => void;
 }
+
 const Sidebar = ({ isSidebarOpen, setSidebarOpen }: SidebarProps) => {
   const pathname = usePathname();
+  const handleLogout = () => {
+    const error = signOut();
+    if (error) toast.error(error);
+    redirect("/login");
+    // setSidebarOpen(false);
+  };
 
   return (
     <aside
@@ -36,7 +45,7 @@ const Sidebar = ({ isSidebarOpen, setSidebarOpen }: SidebarProps) => {
             href={to}
             onClick={() => setSidebarOpen(false)}
             className={classNames({
-              "w-full flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-gray-200 font-semibold":
+              "w-full flex items-center space-x-3 py-3 px-4 rounded-lg text-black hover:bg-gray-200 font-semibold":
                 true,
               "bg-blue-500 hover:bg-blue-500 text-white !font-black":
                 to === pathname,
@@ -47,15 +56,13 @@ const Sidebar = ({ isSidebarOpen, setSidebarOpen }: SidebarProps) => {
           </Link>
         ))}
       </nav>
-      <div className="flex flex-col p-4">
-        <span>
-          <button
-            className={`w-full flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-gray-200`}
-          >
-            <FaSignOutAlt className="h-6 w-6" />
-            <span>Sign Out</span>
-          </button>
-        </span>
+      <div className="flex flex-col p-4" onClick={handleLogout}>
+        <button
+          className={`w-full flex items-center space-x-3 py-3 px-4 rounded-lg hover:bg-gray-200`}
+        >
+          <FaSignOutAlt className="h-6 w-6" />
+          <span>Sign Out</span>
+        </button>
       </div>
     </aside>
   );

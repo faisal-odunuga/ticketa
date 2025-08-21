@@ -1,12 +1,7 @@
 import supabase from "@/lib/supabase";
 
 export async function getAllEvents() {
-  const { data: events, error } = await supabase.from("events").select(`
-    id,
-    status,
-    qrCode,
-    event:events ( id, title, event_date, venue, location )
-  `);
+  const { data: events, error } = await supabase.from("events").select(`*`);
   if (error) {
     console.error(error);
     throw new Error("Events could not be loaded");
@@ -25,4 +20,17 @@ export async function getSingleEvent(event_id: string) {
     throw new Error("Event could not be loaded");
   }
   return event;
+}
+
+export async function getUserEvents(userId: string) {
+  const { data: events, error } = await supabase
+    .from("events")
+    .select("*")
+    .eq("organizer_id", userId)
+    .order("created_at", { ascending: true });
+
+  if (error) throw new Error("Error fetching tickets");
+  console.log(events);
+
+  return events;
 }

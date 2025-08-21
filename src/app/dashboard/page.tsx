@@ -1,12 +1,12 @@
 "use client";
-import Stats from "@/components/dashboard/home/Stats";
 import Tickets from "@/components/dashboard/home/Tickets";
 import React from "react";
+import TicketStats from "@/components/dashboard/home/TicketStats";
 
 const DashboardHome = () => {
   return (
     <div>
-      <Stats />
+      <TicketStats />
       <Tickets />
     </div>
   );

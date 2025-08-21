@@ -10,11 +10,11 @@ export const dashboardMenu = [
   {
     icon: IoTicketSharp,
     label: "View My Events",
-    to: " my-events",
+    to: "/dashboard/my-events",
   },
   {
     icon: BiUser,
     label: "Settings",
-    to: "/settings",
+    to: "/dashboard/settings",
   },
 ];

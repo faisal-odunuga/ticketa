@@ -1,23 +1,30 @@
-import Loader from "@/components/ui/loader/Loader";
 import TicketCard from "@/components/ui/ticket/Ticket";
-import { getUserTickets } from "@/services/apiTicket";
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import Loader from "@/components/ui/loader/Loader";
+import { useTickets } from "@/state/TicketInfoProvider";
 
-const Tickets = () => {
-  const { data: tickets = [], isLoading } = useQuery({
-    queryKey: ["tickets"],
-    queryFn: getUserTickets,
-  });
+const TicketsPage = () => {
+  const { tickets, ticketCount, isLoading, refetch } = useTickets();
 
   if (isLoading) return <Loader />;
+
   return (
     <section>
-      {tickets.map((ticket, index) => (
-        <TicketCard key={index} ticket={ticket} />
-      ))}
+      <h2 className="text-2xl font-bold mb-4">My Tickets ({ticketCount})</h2>
+      {tickets.length > 0 ? (
+        tickets.map((ticket, index) => (
+          <TicketCard key={index} ticket={ticket} />
+        ))
+      ) : (
+        <p>No tickets found</p>
+      )}
+      <button
+        onClick={() => refetch()}
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+      >
+        Refresh Tickets
+      </button>
     </section>
   );
 };
 
-export default Tickets;
+export default TicketsPage;

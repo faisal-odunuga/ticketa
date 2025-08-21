@@ -1,19 +1,16 @@
+import { UserWithProfile } from "@/hooks/definitions";
+import { getInitials } from "@/utils/helpers";
+import Image from "next/image";
 import Link from "next/link";
-import { BiUser } from "react-icons/bi";
-import { FaRegBell } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
-import {
-  IoCartOutline,
-  IoMenu,
-  IoSearch,
-  IoStorefrontOutline,
-} from "react-icons/io5";
+import { IoMenu, IoSearch } from "react-icons/io5";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
+  user: UserWithProfile;
 }
-const Header = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
+const Header = ({ isSidebarOpen, toggleSidebar, user }: SidebarProps) => {
   return (
     <header className="w-full sticky bg-white p-4 flex items-center md:justify-end justify-between ">
       <div
@@ -31,23 +28,29 @@ const Header = ({ isSidebarOpen, toggleSidebar }: SidebarProps) => {
         <button className="text-gray-500 hover:text-gray-700">
           <IoSearch className="h-6 w-6" />
         </button>
-        <button className="text-gray-500 hover:text-gray-700">
-          <FaRegBell className="h-6 w-6" />
-        </button>
-        <button className="text-gray-500 hover:text-gray-700">
-          <IoCartOutline className="h-6 w-6" />
-        </button>
-        <button className="text-gray-500 hover:text-gray-700">
-          <IoStorefrontOutline className="h-6 w-6" />
-        </button>
         <Link href="/settings">
           <div className="flex items-center space-x-2 cursor-pointer">
-            <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-              <BiUser className="h-5 w-5 text-primary" />
+            <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center relative">
+              {user.profile?.image ? (
+                <Image
+                  src={user.profile?.image || ""}
+                  alt={user.profile?.name || ""}
+                  fill
+                  sizes="100%"
+                  className="rounded-full object-cover"
+                />
+              ) : (
+                <span className="text-lg font-bold text-blue-600">
+                  {getInitials(user.profile?.name || "")}
+                </span>
+              )}
+              <span className="text-lg font-bold text-blue-600">
+                {getInitials(user.profile?.name || "")}
+              </span>
             </div>
 
             <span className="hidden text-sm font-medium text-gray-700 md:block">
-              Faisal Odunuga
+              {user.profile?.name}
             </span>
           </div>
         </Link>
