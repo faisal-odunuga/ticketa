@@ -1,6 +1,5 @@
 import { dashboardMenu } from "@/lib/allLinks";
 import { signOut } from "@/services/apiAuth";
-import classNames from "classnames";
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
 import { FaSignOutAlt } from "react-icons/fa";
@@ -44,12 +43,11 @@ const Sidebar = ({ isSidebarOpen, setSidebarOpen }: SidebarProps) => {
             key={label}
             href={to}
             onClick={() => setSidebarOpen(false)}
-            className={classNames({
-              "w-full flex items-center space-x-3 py-3 px-4 rounded-lg text-black hover:bg-gray-200 font-semibold":
-                true,
-              "bg-blue-500 hover:bg-blue-500 text-white !font-black":
-                to === pathname,
-            })}
+            className={`w-full flex items-center space-x-3 py-3 px-4 rounded-lg ${
+              to === pathname
+                ? "bg-blue-500 hover:bg-blue-500 text-white !font-black"
+                : "text-black hover:bg-gray-200 hover:text-black hover:font-semibold"
+            }`}
           >
             <Icon className="h-6 w-6" />
             <span>{label}</span>

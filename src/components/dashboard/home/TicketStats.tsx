@@ -6,12 +6,12 @@ import { LuTicket } from "react-icons/lu";
 import { TbCurrencyNaira } from "react-icons/tb";
 
 const TicketStats = () => {
-  const { ticketCount } = useTickets();
+  const { ticketCount, amountSpent } = useTickets();
 
   const data = [
     { title: ticketCount, desc: "Total Tickets", Icon: LuTicket },
     { title: 2, desc: "Upcoming Events", Icon: CiCalendarDate },
-    { title: 500, desc: "Amount Spent", Icon: TbCurrencyNaira },
+    { title: amountSpent, desc: "Amount Spent", Icon: TbCurrencyNaira },
   ];
 
   return (

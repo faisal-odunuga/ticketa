@@ -4,6 +4,11 @@ import { HiOutlineMail } from "react-icons/hi";
 import { MdOutlineFileDownload } from "react-icons/md";
 import Button from "../button/Button";
 
+const statusColor = {
+  pending: "bg-yellow-100 text-yellow-800",
+  success: "bg-green-100 text-green-800",
+  failed: "bg-red-100 text-red-800",
+};
 const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
   return (
     <div className="flex flex-col lg:flex-row bg-white">
@@ -13,7 +18,11 @@ const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
             <h3 className="text-xl font-bold text-gray-900 mb-2">
               {ticket.event.title}
             </h3>
-            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-green-100 text-green-800">
+            <div
+              className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
+                statusColor[ticket.status.toLowerCase()]
+              }`}
+            >
               {SentenseCase(ticket.status)}
             </div>
           </div>

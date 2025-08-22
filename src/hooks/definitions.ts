@@ -71,6 +71,7 @@ export interface TicketProps {
   status?: string;
   ticket_number?: string;
   ticket_type: string;
+  amount: number;
   event: EventDetails;
 }
 

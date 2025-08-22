@@ -6,6 +6,7 @@ export async function signInWithGoogle() {
     provider: "google",
     options: {
       redirectTo: "https://ticketa-six.vercel.app/dashboard",
+      // redirectTo: "/dashboard",
     },
   });
   if (error) console.error("Login error:", error.message);

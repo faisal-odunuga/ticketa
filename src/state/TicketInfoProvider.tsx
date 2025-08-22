@@ -10,6 +10,9 @@ interface TicketsContextType {
   tickets: TicketProps[];
   ticketCount: number;
   isLoading: boolean;
+  authLoading: boolean;
+  amountSpent: number;
+
   refetch: () => void;
 }
 
@@ -28,12 +31,18 @@ export const TicketInfoProvider = ({ children }: { children: ReactNode }) => {
     enabled: !!user && !authLoading,
   });
 
+  const amountSpent = tickets.reduce((acc, ticket) => {
+    return acc + ticket.price;
+  }, 0);
+
   const value: TicketsContextType = {
     user,
     tickets,
     ticketCount: tickets.length,
     isLoading,
     refetch,
+    authLoading,
+    amountSpent,
   };
 
   return (

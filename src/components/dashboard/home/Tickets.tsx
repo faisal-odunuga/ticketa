@@ -1,11 +1,9 @@
 import TicketCard from "@/components/ui/ticket/Ticket";
-import Loader from "@/components/ui/loader/Loader";
+
 import { useTickets } from "@/state/TicketInfoProvider";
 
 const TicketsPage = () => {
-  const { tickets, ticketCount, isLoading, refetch } = useTickets();
-
-  if (isLoading) return <Loader />;
+  const { tickets, ticketCount, refetch } = useTickets();
 
   return (
     <section>
