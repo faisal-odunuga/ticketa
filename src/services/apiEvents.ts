@@ -1,3 +1,4 @@
+import { EventCardProps } from "@/hooks/definitions";
 import supabase from "@/lib/supabase";
 
 export async function getAllEvents() {
@@ -9,7 +10,9 @@ export async function getAllEvents() {
   return events;
 }
 
-export async function getSingleEvent(event_id: string) {
+export async function getSingleEvent(
+  event_id: string
+): Promise<EventCardProps | null> {
   const { data: event, error } = await supabase
     .from("events")
     .select("*")

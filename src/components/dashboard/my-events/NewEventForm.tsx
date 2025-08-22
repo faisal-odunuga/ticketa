@@ -12,13 +12,10 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
   // function onSubmit(data: EventCardProps) {
   //   alert("Submitted");
   //   console.log(data);
-  // }
-  function onError(error) {
-    console.log(error);
-  }
+  //
   const { register, handleSubmit } = useForm<EventCardProps>();
 
-  const onSubmit: SubmitHandler<EventCardProps> = (data) => {
+  const onSubmit: SubmitHandler<EventCardProps> = () => {
     alert("Submitted");
   };
 
@@ -31,7 +28,7 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
       </header>
 
       <main className="p-6 pt-0">
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit, onError)}>
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
