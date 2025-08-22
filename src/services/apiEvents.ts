@@ -30,7 +30,6 @@ export async function getUserEvents(userId: string) {
     .order("created_at", { ascending: true });
 
   if (error) throw new Error("Error fetching tickets");
-  console.log(events);
 
   return events;
 }

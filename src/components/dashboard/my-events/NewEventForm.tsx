@@ -20,7 +20,6 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
 
   const onSubmit: SubmitHandler<EventCardProps> = (data) => {
     alert("Submitted");
-    console.log(data);
   };
 
   return (

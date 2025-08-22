@@ -9,7 +9,6 @@ interface ErrorProps {
 }
 export default function Error({ error }: ErrorProps) {
   const { id } = useParams();
-  console.log(String(id));
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-center">

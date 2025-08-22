@@ -3,29 +3,28 @@
 import { EventCardProps } from "@/hooks/definitions";
 import { getFormattedDate, getTime } from "@/utils/helpers";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { CiCalendar } from "react-icons/ci";
 import { GrLocation } from "react-icons/gr";
 import { LuUser, LuUsers } from "react-icons/lu";
-import Button from "../ui/button/Button";
 
 export default function EventDetailsClient({
   event,
 }: {
   event: EventCardProps;
 }) {
-  const router = useRouter();
+  // const router = useRouter();
 
-  const handleTicketPurchase = () => {
-    router.push(`/order-summary?eventId=${event.id}`);
-  };
+  // const handleTicketPurchase = () => {
+  //   router.push(`/order-summary?eventId=${event?.event_id}`);
+  // };
 
   return (
     <div className="flex items-center justify-center">
       <div className="bg-white rounded-lg  max-w-5xl space-y-10">
         <div className="relative">
           <Image
-            src={event?.bannerUrl}
+            src={event!.bannerUrl!}
             alt={event?.title}
             width={600}
             height={300}

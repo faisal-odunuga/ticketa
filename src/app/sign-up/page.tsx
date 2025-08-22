@@ -20,7 +20,7 @@ const SignUp = () => {
   const router = useRouter();
 
   const onSubmit: SubmitHandler<SignUpFormValues> = async (formData) => {
-    const { data, error } = await userSignUp(formData);
+    const { error } = await userSignUp(formData);
 
     if (error) {
       toast.error(error.message);

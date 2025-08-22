@@ -56,14 +56,19 @@ export async function userSignUp(formData: SignUpFormValues) {
     if (insertError) {
       throw new Error(`User insert failed: ${insertError.message}`);
     }
-    console.log(insertedData);
 
     // ✅ If everything works, return data
     return { data: insertedData, error: null };
-  } catch (err: any) {
-    // ❌ Any error gets caught here
-    console.error("Signup error:", err.message);
-    return { data: null, error: err };
+  } catch (err: unknown) {
+    // Check if it's an Error object
+    if (err instanceof Error) {
+      console.error("Signup error:", err.message);
+      return { data: null, error: err };
+    }
+
+    // Fallback for unknown types
+    console.error("Signup error:", err);
+    return { data: null, error: new Error("Unknown error") };
   }
 }
 

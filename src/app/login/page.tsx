@@ -18,7 +18,7 @@ const SignIn = () => {
   } = useForm<SignInFormValues>();
   const router = useRouter();
   const onSubmit: SubmitHandler<SignInFormValues> = async (formData) => {
-    const { data, error } = await userLoginIn(formData);
+    const { error } = await userLoginIn(formData);
 
     if (error) {
       toast.error(error.message);
