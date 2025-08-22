@@ -5,7 +5,7 @@ export async function signInWithGoogle() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "http://localhost:3000/dashboard",
+      redirectTo: "https://ticketa-six.vercel.app/dashboard",
     },
   });
   if (error) console.error("Login error:", error.message);
