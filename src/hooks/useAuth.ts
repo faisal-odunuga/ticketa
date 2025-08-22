@@ -4,14 +4,6 @@ import { useEffect, useState } from "react";
 import supabase from "@/lib/supabase";
 import { UserWithProfile } from "./definitions";
 
-interface Profile {
-  id: string;
-  user_id: string;
-  name: string;
-  gender?: string;
-  avatar?: string;
-}
-
 export function useAuth() {
   const [user, setUser] = useState<UserWithProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -51,12 +43,10 @@ export function useAuth() {
   useEffect(() => {
     fetchUser();
 
-    const { data: subscription } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        // Whenever auth state changes, refetch user + profile
-        fetchUser();
-      }
-    );
+    const { data: subscription } = supabase.auth.onAuthStateChange(() => {
+      // Whenever auth state changes, refetch user + profile
+      fetchUser();
+    });
 
     return () => subscription.subscription.unsubscribe();
   }, []);
