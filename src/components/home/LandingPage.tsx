@@ -1,3 +1,5 @@
+import Filters from "../ui/filter-box/Filterbox";
+
 const LandingPage = () => {
   return (
     <section className="">
@@ -9,7 +11,7 @@ const LandingPage = () => {
           Find and book tickets for concerts, conferences, and experiences near
           you
         </p>
-        {/* <SearchInput /> */}
+        <Filters />
       </div>
     </section>
   );

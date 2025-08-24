@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/state/Providers";
 import { ToastContainer } from "react-toastify";
+import { UserEventsProvider } from "@/state/EventsContext";
 
 export const metadata: Metadata = {
   title: "Ticketa",
@@ -16,7 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={``}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <UserEventsProvider>
+            <main>{children}</main>
+          </UserEventsProvider>
+        </Providers>
         <ToastContainer />
       </body>
     </html>

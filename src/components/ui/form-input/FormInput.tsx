@@ -1,3 +1,4 @@
+"use client";
 import { InputHTMLAttributes, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 

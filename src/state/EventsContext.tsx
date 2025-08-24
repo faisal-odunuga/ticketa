@@ -1,15 +1,20 @@
 // context/UserEventsContext.tsx
+"use client";
+
 import React, { createContext, useContext, ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth"; // define proper EventProps type
-import { getUserEvents } from "@/services/apiEvents";
+import { useAuth } from "@/hooks/useAuth";
+import { getUserEvents, getEventsCategories } from "@/services/apiEvents";
 import { EventCardProps } from "@/hooks/definitions";
 
 interface UserEventsContextType {
   events: EventCardProps[];
   eventCount: number;
-  isLoading: boolean;
-  refetch: () => void;
+  isLoadingEvents: boolean;
+  refetchEvents: () => void;
+  categories: string[];
+  isLoadingCategories: boolean;
+  refetchCategories: () => void;
 }
 
 const UserEventsContext = createContext<UserEventsContextType | undefined>(
@@ -19,21 +24,35 @@ const UserEventsContext = createContext<UserEventsContextType | undefined>(
 export const UserEventsProvider = ({ children }: { children: ReactNode }) => {
   const { user, loading: authLoading } = useAuth();
 
+  // ✅ User events query
   const {
     data: events = [],
-    isLoading,
-    refetch,
+    isLoading: isLoadingEvents,
+    refetch: refetchEvents,
   } = useQuery({
     queryKey: ["user-events", user?.id],
     queryFn: () => getUserEvents(user!.id),
     enabled: !!user && !authLoading,
   });
 
+  // ✅ Categories query
+  const {
+    data: categories = [],
+    isLoading: isLoadingCategories,
+    refetch: refetchCategories,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getEventsCategories,
+  });
+
   const value: UserEventsContextType = {
     events,
     eventCount: events.length,
-    isLoading,
-    refetch,
+    isLoadingEvents,
+    refetchEvents,
+    categories,
+    isLoadingCategories,
+    refetchCategories,
   };
 
   return (

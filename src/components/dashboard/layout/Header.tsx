@@ -10,7 +10,11 @@ interface SidebarProps {
   toggleSidebar: () => void;
   user: UserWithProfile;
 }
-const Header = ({ isSidebarOpen, toggleSidebar, user }: SidebarProps) => {
+const DashboardHeader = ({
+  isSidebarOpen,
+  toggleSidebar,
+  user,
+}: SidebarProps) => {
   return (
     <header className="w-full sticky bg-white p-4 flex items-center md:justify-end justify-between ">
       <div
@@ -59,4 +63,4 @@ const Header = ({ isSidebarOpen, toggleSidebar, user }: SidebarProps) => {
   );
 };
 
-export default Header;
+export default DashboardHeader;

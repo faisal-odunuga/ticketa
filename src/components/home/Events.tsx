@@ -5,10 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import Loader from "../ui/loader/Loader";
 import { getFeaturedEvents } from "@/utils/helpers";
 
-const Events = () => {
+const Events = ({ search, category }) => {
   const { data: events = [], isLoading } = useQuery({
-    queryKey: ["events"],
-    queryFn: getAllEvents,
+    queryKey: ["events", search, category],
+    queryFn: () => getAllEvents({ search, category }),
   });
   const featuredEvents = getFeaturedEvents(events);
   if (isLoading)
@@ -23,7 +23,7 @@ const Events = () => {
         <div className="space-y-1">
           <h2 className="text-2xl font-bold">Upcoming Events</h2>
           <p className="text-[#4b5563]">
-            {featuredEvents.length} event
+            {featuredEvents.length || "No"} event
             {featuredEvents.length !== 1 ? "s" : ""} found
           </p>
         </div>

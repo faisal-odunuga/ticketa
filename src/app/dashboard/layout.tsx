@@ -1,5 +1,5 @@
 "use client";
-import Header from "@/components/dashboard/layout/Header";
+import DashboardHeader from "@/components/dashboard/layout/Header";
 import Sidebar from "@/components/dashboard/layout/Sidebar";
 import { useAuth } from "@/hooks/useAuth";
 import { UserEventsProvider } from "@/state/EventsContext";
@@ -43,7 +43,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
             />
           )}
           <div className="flex-1 flex flex-col overflow-hidden relative h-screen">
-            <Header
+            <DashboardHeader
               isSidebarOpen={isSidebarOpen}
               toggleSidebar={toggleSidebar}
               user={user}
