@@ -156,7 +156,7 @@ export default function OrderSummary({
             <div className="rounded-lg border bg-card text-card-foreground shadow-sm h-fit">
               <div className="flex flex-col space-y-1.5 p-6">
                 <h3 className="text-2xl font-semibold leading-none tracking-tight flex items-center space-x-2">
-                  <span>Event Details</span>
+                  <span>Customer Information</span>
                 </h3>
               </div>
               <div className="grid grid-cols-1 gap-4 px-6 pb-6">
