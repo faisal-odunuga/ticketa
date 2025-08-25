@@ -14,7 +14,7 @@ export default async function EventDetailsPage({
 }: {
   params: { event_id: string };
 }) {
-  const { event_id } = params as { event_id: string };
+  const { event_id } = (await params) as { event_id: string };
 
   const event: EventCardProps | null = await getSingleEvent(event_id);
 

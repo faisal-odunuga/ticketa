@@ -23,10 +23,8 @@ const EventCard = ({ event }: { event: EventCardProps }) => {
           {event.category.charAt(0).toUpperCase() + event.category.slice(1)}
         </div>
 
-        <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full">
-          <span className="text-blue-600 font-bold">
-            ₦ {event.ticketTypes[0].price.toLocaleString()}
-          </span>
+        <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full border">
+          <span className="text-blue-600 font-bold">Available</span>
         </div>
       </div>
 

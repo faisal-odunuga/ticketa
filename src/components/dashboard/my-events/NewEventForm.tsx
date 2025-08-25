@@ -2,21 +2,25 @@
 import Button from "@/components/ui/button/Button";
 import FormInput from "@/components/ui/form-input/FormInput";
 import SelectInput from "@/components/ui/select-input/SelectInput";
-import { EventCardProps, ToggleFormProps } from "@/hooks/definitions";
+import { NewEventFormValues, ToggleFormProps } from "@/hooks/definitions";
+import { createEvent } from "@/services/apiEvents";
 import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 
 const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
-  // const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, control } = useForm<NewEventFormValues>({
+    defaultValues: {
+      ticketTypes: [{ name: "Regular", price: 0, quantity: 0 }], // one default ticket
+    },
+  });
 
-  // function onSubmit(data: EventCardProps) {
-  //   alert("Submitted");
-  //   console.log(data);
-  //
-  const { register, handleSubmit } = useForm<EventCardProps>();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "ticketTypes",
+  });
 
-  const onSubmit: SubmitHandler<EventCardProps> = () => {
-    alert("Submitted");
+  const onSubmit: SubmitHandler<NewEventFormValues> = (data) => {
+    createEvent(data);
   };
 
   return (
@@ -30,75 +34,68 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
       <main className="p-6 pt-0">
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left side */}
             <div className="space-y-4">
-              <div>
-                <FormInput
-                  id="title"
-                  type="text"
-                  placeholder="Enter event title"
-                  required
-                  label="Event Title"
-                  {...register("title", { required: "This field is required" })}
-                />
-              </div>
-              <div>
-                <SelectInput
-                  id="category"
-                  required
-                  label="Category"
-                  {...register("category")}
-                >
-                  <option value="">Select category</option>
-                  <option value="Music">Music</option>
-                  <option value="Sports">Sports</option>
-                  <option value="Technology">Technology</option>
-                  <option value="Arts">Arts</option>
-                  <option value="Food & Drink">Food & Drink</option>
-                  <option value="Business">Business</option>
-                </SelectInput>
-              </div>
-              <div>
-                <FormInput
-                  id="startDate"
-                  type="datetime-local"
-                  required
-                  label="Start Date"
-                  {...register("startDate")}
-                />
-              </div>
+              <FormInput
+                id="title"
+                type="text"
+                placeholder="Enter event title"
+                required
+                label="Event Title"
+                {...register("title", { required: "This field is required" })}
+              />
 
-              <div>
-                <FormInput
-                  id="endDate"
-                  type="datetime-local"
-                  required
-                  label="End Date"
-                  {...register("endDate")}
-                />
-              </div>
+              <SelectInput
+                id="category"
+                required
+                label="Category"
+                {...register("category")}
+              >
+                <option value="">Select category</option>
+                <option value="Music">Music</option>
+                <option value="Sports">Sports</option>
+                <option value="Technology">Technology</option>
+                <option value="Arts">Arts</option>
+                <option value="Food & Drink">Food & Drink</option>
+                <option value="Business">Business</option>
+              </SelectInput>
 
-              <div>
-                <FormInput
-                  id="venue"
-                  type="text"
-                  placeholder="Enter venue name"
-                  required
-                  label="Venue"
-                  {...register("venue")}
-                />
-              </div>
-              <div>
-                <FormInput
-                  id="location"
-                  type="text"
-                  placeholder="City, State"
-                  required
-                  label="Location"
-                  {...register("location")}
-                />
-              </div>
+              <FormInput
+                id="startDate"
+                type="datetime-local"
+                required
+                label="Start Date"
+                {...register("startDate")}
+              />
+
+              <FormInput
+                id="endDate"
+                type="datetime-local"
+                required
+                label="End Date"
+                {...register("endDate")}
+              />
+
+              <FormInput
+                id="venue"
+                type="text"
+                placeholder="Enter venue name"
+                required
+                label="Venue"
+                {...register("venue")}
+              />
+
+              <FormInput
+                id="location"
+                type="text"
+                placeholder="City, State"
+                required
+                label="Location"
+                {...register("location")}
+              />
             </div>
 
+            {/* Right side */}
             <div className="space-y-4">
               <div>
                 <label
@@ -117,51 +114,80 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
                 ></textarea>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <FormInput
-                    id="price"
-                    type="number"
-                    min="0"
-                    placeholder="0.00"
-                    required
-                    label="Ticket Price ($)"
-                    {...register("price")}
-                  />
-                </div>
-                <div>
-                  <FormInput
-                    id="totalTickets"
-                    type="number"
-                    min="0"
-                    placeholder="100"
-                    required
-                    label="Total ticket"
-                    {...register("totalTickets")}
-                  />
-                </div>
+              {/* Ticket Types Section */}
+              <div className="space-y-3">
+                <h4 className="font-semibold text-lg">Ticket Types</h4>
+
+                {fields.map((field, index) => (
+                  <div
+                    key={field.id}
+                    className="grid grid-cols-3 gap-3 items-end border p-3 rounded-md"
+                  >
+                    <FormInput
+                      id={`ticketTypes.${index}.name`}
+                      type="text"
+                      placeholder="Regular / VIP"
+                      label="Type"
+                      {...register(`ticketTypes.${index}.name` as const)}
+                    />
+
+                    <FormInput
+                      id={`ticketTypes.${index}.price`}
+                      type="number"
+                      min="0"
+                      placeholder="0.00"
+                      label="Price"
+                      {...register(`ticketTypes.${index}.price` as const, {
+                        valueAsNumber: true,
+                      })}
+                    />
+
+                    <FormInput
+                      id={`ticketTypes.${index}.quantity`}
+                      type="number"
+                      min="0"
+                      placeholder="100"
+                      label="Available"
+                      {...register(`ticketTypes.${index}.quantity` as const, {
+                        valueAsNumber: true,
+                      })}
+                    />
+
+                    {index > 0 && (
+                      <Button
+                        type="button"
+                        onClick={() => remove(index)}
+                        btnText="Remove"
+                        filled={false}
+                      />
+                    )}
+                  </div>
+                ))}
+
+                <Button
+                  type="button"
+                  btnText="+ Add Ticket Type"
+                  onClick={() => append({ name: "", price: 0, quantity: 0 })}
+                />
               </div>
 
-              <div>
-                <FormInput
-                  id="bannerUrl"
-                  type="file"
-                  accept="image/*"
-                  required
-                  label="Upload Image banner (Max 1MB, only images)"
-                  {...register("bannerUrl")}
-                />
-              </div>
-              <div>
-                <FormInput
-                  id="organizer"
-                  type="text"
-                  placeholder="Your organization name"
-                  required
-                  label="Organizer Name"
-                  {...register("organizer")}
-                />
-              </div>
+              <FormInput
+                id="bannerUrl"
+                type="file"
+                accept="image/*"
+                required
+                label="Upload Image banner (Max 1MB, only images)"
+                {...register("bannerUrl")}
+              />
+
+              {/* <FormInput
+                id="organizer"
+                type="text"
+                placeholder="Your organization name"
+                required
+                label="Organizer Name"
+                {...register("organizer")}
+              /> */}
             </div>
           </div>
 
@@ -171,11 +197,7 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
               btnText="Cancel"
               onClick={() => setShowForm(false)}
             />
-            <Button
-              type="submit"
-              btnText="Create Event"
-              // onClick={() => setShowForm(false)}
-            />
+            <Button type="submit" btnText="Create Event" />
           </div>
         </form>
       </main>

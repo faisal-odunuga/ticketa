@@ -9,7 +9,7 @@ export const generatePath = {
   paymentPage: (eventId: string) => `/dashboard/checkout/${eventId}`,
 };
 
-export const getDate = (date: Date) => {
+export const getDate = (date: Date | string) => {
   return new Date(date).toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "2-digit",
@@ -17,14 +17,14 @@ export const getDate = (date: Date) => {
   });
 };
 
-export const getTime = (date: Date) => {
+export const getTime = (date: Date | string) => {
   return new Date(date).toLocaleTimeString("en-Us", {
     hour: "2-digit",
     minute: "2-digit",
   });
 };
 
-export const getFormattedDate = (date: Date) => {
+export const getFormattedDate = (date: Date | string) => {
   return new Date(date).toLocaleDateString("en-US", {
     weekday: "short",
     year: "numeric",
@@ -45,6 +45,7 @@ export const getFeaturedEvents = (
     }))
     .filter((item) => item.endDate > now)
     .sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
+
   return featuredEvents;
 };
 

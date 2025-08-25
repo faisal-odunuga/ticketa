@@ -47,6 +47,20 @@ export interface Event {
   event: EventCardProps;
 }
 
+export interface NewEventFormValues {
+  title: string;
+  description: string;
+  location: string;
+  venue: string;
+  category: string;
+  startDate: string; // "2025-10-12T08:00"
+  endDate: string;
+  ticketTypes: TicketType[];
+  bannerUrl: FileList; // file input
+  status: string;
+  organizer: string;
+}
+
 export interface EventCardProps {
   event_id?: string;
   title: string;
@@ -54,15 +68,14 @@ export interface EventCardProps {
   location: string;
   venue: string;
   category: string;
-  startDate: Date;
-  endDate: Date;
-  ticketTypes: TicketType[];
-  bannerUrl?: string;
+  startDate: string | Date; // ISO string
+  endDate: string | Date;
+  ticketTypes: TicketType[]; // JSON.stringify([...])
+  bannerUrl?: string; // public URL
   soldTickets?: number;
   totalTickets?: number;
   status: string;
   maxCapacity?: number;
-  price: number;
   organizer: string;
 }
 

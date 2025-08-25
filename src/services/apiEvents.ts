@@ -1,5 +1,8 @@
-import { EventCardProps } from "@/hooks/definitions";
+import { EventCardProps, NewEventFormValues } from "@/hooks/definitions";
 import supabase from "@/lib/supabase";
+
+const bucketUrl =
+  "https://emmqmitwbsgbejfjwxun.supabase.co/storage/v1/object/public/event-images";
 
 export async function getAllEvents({
   search,
@@ -16,7 +19,9 @@ export async function getAllEvents({
   if (search) {
     query = query
       .ilike("title", `%${search}%`)
-      .or(`description.ilike.%${search}%`);
+      .or(`description.ilike.%${search}%`)
+      .or(`location.ilike.%${search}%`)
+      .or(`venue.ilike.%${search}%`);
   }
 
   const { data: events, error } = await query;
@@ -25,7 +30,7 @@ export async function getAllEvents({
     console.error(error);
     throw new Error("Events could not be loaded");
   }
-
+  console.log(events);
   return events;
 }
 
@@ -55,6 +60,7 @@ export async function getUserEvents(userId: string) {
 
   return events;
 }
+
 export async function getEventsCategories() {
   const { data: catatories, error } = await supabase
     .from("events")
@@ -66,6 +72,36 @@ export async function getEventsCategories() {
   );
 
   return uniqueCategories;
-
-  // return catatories;
 }
+
+export const createEvent = async (newEvent: NewEventFormValues) => {
+  // Image Uploading
+
+  const file = (newEvent.bannerUrl as unknown as FileList)?.[0];
+  const fileName = `${newEvent.title}-${Date.now()}`;
+
+  const { data, error } = await supabase.storage
+    .from("event-images")
+    .upload(fileName, file);
+  if (error) {
+    console.error(error);
+    throw new Error("Error uploading image");
+  }
+
+  const formattedEvent = {
+    ...newEvent,
+    startDate: newEvent.startDate,
+    endDate: newEvent.endDate,
+    bannerUrl: `${bucketUrl}/${fileName}`,
+  };
+
+  const { data: createdEvent, error: eventError } = await supabase
+    .from("events")
+    .insert([formattedEvent]);
+
+  if (eventError) {
+    console.error(eventError);
+    throw new Error("Event could not be created");
+  }
+  return createdEvent;
+};
