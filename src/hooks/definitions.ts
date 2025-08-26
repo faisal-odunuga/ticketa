@@ -25,13 +25,11 @@ export interface UserWithProfile extends SupabaseUser {
   profile?: Profile;
 }
 
-// export interface AppUser extends SupabaseUser {
-//   profile?: Profile;
-// }
 export interface TicketType {
   name: string;
   price: number;
-  quantity: number;
+  sold_tickets?: number;
+  total_tickets: number;
 }
 
 export interface EventDetails {
@@ -72,8 +70,6 @@ export interface EventCardProps {
   endDate: string | Date;
   ticketTypes: TicketType[]; // JSON.stringify([...])
   bannerUrl?: string; // public URL
-  soldTickets?: number;
-  totalTickets?: number;
   status: string;
   maxCapacity?: number;
   organizer: string;
@@ -101,4 +97,14 @@ export interface StatProp {
 export interface ToggleFormProps {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
   handleShowForm?: () => void;
+}
+
+export interface PaystackResponse {
+  reference: string; // The unique transaction reference
+  trans: string; // Transaction ID
+  status: "success" | "failed" | "pending"; // Payment status
+  message: string; // Status message from the gateway
+  transaction: string; // Transaction ID (same as trans)
+  trxref: string; // Transaction reference (same as reference)
+  redirecturl: string; // URL to redirect the user after payment
 }

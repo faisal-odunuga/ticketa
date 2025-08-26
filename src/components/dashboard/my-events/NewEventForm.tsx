@@ -10,7 +10,7 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
   const { register, handleSubmit, control } = useForm<NewEventFormValues>({
     defaultValues: {
-      ticketTypes: [{ name: "Regular", price: 0, quantity: 0 }], // one default ticket
+      ticketTypes: [{ name: "Regular", price: 0, total_tickets: 0 }], // one default ticket
     },
   });
 
@@ -143,14 +143,17 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
                     />
 
                     <FormInput
-                      id={`ticketTypes.${index}.quantity`}
+                      id={`ticketTypes.${index}.total_tickets`}
                       type="number"
                       min="0"
                       placeholder="100"
                       label="Available"
-                      {...register(`ticketTypes.${index}.quantity` as const, {
-                        valueAsNumber: true,
-                      })}
+                      {...register(
+                        `ticketTypes.${index}.total_tickets` as const,
+                        {
+                          valueAsNumber: true,
+                        }
+                      )}
                     />
 
                     {index > 0 && (
@@ -167,7 +170,9 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
                 <Button
                   type="button"
                   btnText="+ Add Ticket Type"
-                  onClick={() => append({ name: "", price: 0, quantity: 0 })}
+                  onClick={() =>
+                    append({ name: "", price: 0, total_tickets: 0 })
+                  }
                 />
               </div>
 

@@ -1,5 +1,5 @@
 import { EventCardProps } from "@/hooks/definitions";
-import { getDate, getTime } from "@/utils/helpers";
+import { getDate, getTicketCount, getTime } from "@/utils/helpers";
 import Image from "next/image";
 import Link from "next/link";
 import { CiCalendar } from "react-icons/ci";
@@ -8,6 +8,7 @@ import { LuUsers } from "react-icons/lu";
 import Button from "../ui/button/Button";
 
 const EventCard = ({ event }: { event: EventCardProps }) => {
+  const { totalTickets, soldTickets } = getTicketCount(event.ticketTypes);
   return (
     <div className="rounded-lg border shadow-sm cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden">
       <div className="relative">
@@ -50,25 +51,23 @@ const EventCard = ({ event }: { event: EventCardProps }) => {
           <div className="flex items-center space-x-2">
             <LuUsers />
             <span>
-              {event.soldTickets} / {event.totalTickets}{" "}
-              {event.soldTickets > 1 ? "tickets" : "ticket"}
+              {soldTickets} / {totalTickets}{" "}
+              {soldTickets > 1 ? "tickets" : "ticket"}
               {" sold"}
             </span>
           </div>
         </div>
 
-        {event.totalTickets && (
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className={
-                "bg-blue-600 h-2 rounded-full transition-all duration-300"
-              }
-              style={{
-                width: `${(event.soldTickets / event.totalTickets) * 100}%`,
-              }}
-            ></div>
-          </div>
-        )}
+        <div className="w-full bg-gray-200 rounded-full h-2">
+          <div
+            className={
+              "bg-blue-600 h-2 rounded-full transition-all duration-300"
+            }
+            style={{
+              width: `${(soldTickets / totalTickets) * 100}%`,
+            }}
+          ></div>
+        </div>
 
         <Link href={`/event-details/${event.event_id}`} className="block">
           <Button btnText="View Details & Buy Tickets" className="w-full" />

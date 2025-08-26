@@ -6,7 +6,7 @@ import SelectInput from "../select-input/SelectInput";
 import { useUserEvents } from "@/state/EventsContext";
 import { SentenseCase } from "@/utils/helpers";
 
-export default await function Filters() {
+export default function Filters() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -47,4 +47,4 @@ export default await function Filters() {
       />
     </div>
   );
-};
+}

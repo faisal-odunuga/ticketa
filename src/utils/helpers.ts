@@ -1,4 +1,4 @@
-import { EventCardProps } from "@/hooks/definitions";
+import { EventCardProps, TicketType } from "@/hooks/definitions";
 
 export const SentenseCase = (word: string | undefined) => {
   if (word) return word.charAt(0).toUpperCase() + word.slice(1);
@@ -54,4 +54,13 @@ export const getInitials = (name: string) => {
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase())
     .join("");
+};
+
+export const getTicketCount = (tickets: TicketType[]) => {
+  const totalTickets = tickets.reduce(
+    (acc, curr) => acc + curr.total_tickets,
+    0
+  );
+  const soldTickets = tickets.reduce((acc, curr) => acc + curr.sold_tickets, 0);
+  return { totalTickets, soldTickets };
 };

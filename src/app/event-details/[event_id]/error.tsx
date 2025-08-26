@@ -13,7 +13,7 @@ export default function Error({ error }: ErrorProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-center">
       <h1 className="text-4xl font-bold text-red-600">
-        Error getting product {id}
+        Error getting event {id}
       </h1>
       <p className="mt-4 text-gray-600">{error.message}</p>
       <Button onClick={() => window.location.reload()} btnText="Try Again" />

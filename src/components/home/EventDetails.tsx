@@ -1,7 +1,12 @@
 "use client";
 
 import { EventCardProps, TicketType } from "@/hooks/definitions";
-import { getFormattedDate, getTime, SentenseCase } from "@/utils/helpers";
+import {
+  getFormattedDate,
+  getTicketCount,
+  getTime,
+  SentenseCase,
+} from "@/utils/helpers";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { CiCalendar } from "react-icons/ci";
@@ -20,6 +25,7 @@ export default function EventDetailsClient({
   const handleTicketPurchase = () => {
     router.push(`/order-summary?event_id=${event?.event_id}`);
   };
+  const { totalTickets, soldTickets } = getTicketCount(event.ticketTypes);
 
   return (
     <div className="flex items-center justify-center">
@@ -30,7 +36,7 @@ export default function EventDetailsClient({
             alt={event?.title}
             width={600}
             height={300}
-            className="w-full h-64 object-cover rounded-t-lg"
+            className="w-full h-64 object-cover rounded-t-lg border"
           />
         </div>
 
@@ -75,17 +81,9 @@ export default function EventDetailsClient({
                 <LuUsers className="h-5 w-5 text-blue-600" />
                 <div>
                   <h3 className="font-medium text-gray-900">Availability</h3>
-                  {event.ticketTypes?.map((ticket: TicketType) => (
-                    <p
-                      key={ticket.name}
-                      className="flex items-center justify-between"
-                    >
-                      <span className="text-gray-600">
-                        {SentenseCase(ticket.name)}
-                      </span>
-                      <span className="text-gray-600">{ticket.price}</span>
-                    </p>
-                  ))}
+                  <p className="text-gray-600">
+                    {soldTickets} tickets left of {totalTickets} total
+                  </p>
                 </div>
               </div>
 
@@ -108,7 +106,8 @@ export default function EventDetailsClient({
                     <IoTicket className="h-4 w-4 mt-1 text-blue-600" />
 
                     <span className="text-gray-600">
-                      {SentenseCase(ticket.name)} - {ticket.quantity} Tickets
+                      {SentenseCase(ticket.name)} -{" "}
+                      {ticket.total_tickets - ticket.sold_tickets} Tickets
                       Available
                     </span>
                   </li>
