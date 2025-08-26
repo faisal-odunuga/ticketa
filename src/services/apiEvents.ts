@@ -30,7 +30,6 @@ export async function getAllEvents({
     console.error(error);
     throw new Error("Events could not be loaded");
   }
-  console.log(events);
   return events;
 }
 

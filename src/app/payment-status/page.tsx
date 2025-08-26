@@ -72,9 +72,6 @@ export default function PaymentStatus() {
         console.error(err);
         setStatus("error");
         setErrorMessage("Unexpected error during payment verification.");
-      } finally {
-        // Clean session storage
-        sessionStorage.removeItem("reference");
       }
     };
 

@@ -11,6 +11,7 @@ const Events = ({ search, category }) => {
     queryFn: () => getAllEvents({ search, category }),
   });
   const featuredEvents = getFeaturedEvents(events);
+
   if (isLoading)
     return (
       <div className="w-full h-full">

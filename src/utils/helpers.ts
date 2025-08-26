@@ -32,19 +32,30 @@ export const getFormattedDate = (date: Date | string) => {
     day: "numeric",
   });
 };
-
 export const getFeaturedEvents = (
   events: EventCardProps[]
 ): EventCardProps[] => {
   const now = new Date();
-  const featuredEvents = events
-    .map((item: EventCardProps) => ({
-      ...item,
-      startDate: new Date(item.startDate),
-      endDate: new Date(item.endDate),
-    }))
-    .filter((item) => item.endDate > now)
-    .sort((a, b) => a.endDate.getTime() - b.endDate.getTime());
+
+  // Convert dates to Date objects for comparison
+  const processedEvents = events.map((item: EventCardProps) => ({
+    ...item,
+    startDate: new Date(item.startDate),
+    endDate: new Date(item.endDate),
+  }));
+
+  // Filter events that are ongoing or upcoming
+  const featuredEvents = processedEvents.filter((item) => item.endDate >= now);
+
+  // Sort: ongoing events first, then upcoming by startDate
+  featuredEvents.sort((a, b) => {
+    const aOngoing = a.startDate <= now && a.endDate >= now;
+    const bOngoing = b.startDate <= now && b.endDate >= now;
+
+    if (aOngoing && !bOngoing) return -1; // ongoing first
+    if (!aOngoing && bOngoing) return 1;
+    return a.startDate.getTime() - b.startDate.getTime(); // upcoming next
+  });
 
   return featuredEvents;
 };

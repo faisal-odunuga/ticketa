@@ -7,13 +7,13 @@ import { SlPeople } from "react-icons/sl";
 import { TbCurrencyNaira } from "react-icons/tb";
 
 const EventStats = () => {
-  const { eventCount, isLoading } = useUserEvents();
+  const { eventCount, isLoadingEvents } = useUserEvents();
   const data = [
     { title: eventCount, desc: "Total Events", Icon: CiCalendarDate },
     { title: 4802, desc: "Total Attendees", Icon: SlPeople },
     { title: 50000, desc: "Total Revenue", Icon: TbCurrencyNaira },
   ];
-  if (isLoading) {
+  if (isLoadingEvents) {
     return <Loader />;
   }
   return (
