@@ -1,4 +1,4 @@
-import OrderSummary from "@/components/home/OrderSummary";
+import OrderSummary from "@/components/payment-summary/OrderSummary";
 import { getSingleEvent } from "@/services/apiEvents";
 
 export default async function OrderSummaryPage({
