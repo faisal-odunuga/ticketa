@@ -68,9 +68,6 @@ export default function OrderSummary({ event }: EventInfo) {
   };
 
   const onSuccess = (reference: PaystackResponse) => {
-    console.log(reference);
-
-    sessionStorage.setItem("reference", reference.reference);
     router.push(`/payment-status${reference.redirecturl}`);
   };
 

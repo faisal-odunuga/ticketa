@@ -21,7 +21,7 @@ export default function PaymentStatus() {
   const router = useRouter();
 
   const trxref = searchParams.get("trxref");
-  const sessionReference = sessionStorage.getItem("reference");
+  const reference = searchParams.get("reference");
 
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
@@ -30,8 +30,8 @@ export default function PaymentStatus() {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
-    // Prevent spoofing: trxref must match sessionReference
-    if (!trxref || !sessionReference || trxref !== sessionReference) {
+    // Prevent spoofing: trxref must match reference
+    if (!trxref || !reference || trxref !== reference) {
       setStatus("error");
       setErrorMessage(
         "Invalid or mismatched transaction reference. Please do not tamper with the URL."
@@ -79,7 +79,7 @@ export default function PaymentStatus() {
     };
 
     verifyPayment();
-  }, [trxref, sessionReference]);
+  }, [trxref, reference]);
 
   const formatCurrency = (amount: number) =>
     `₦${(amount / 100).toLocaleString()}`;
