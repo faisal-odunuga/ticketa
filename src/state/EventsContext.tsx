@@ -3,9 +3,10 @@
 
 import React, { createContext, useContext, ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
+
 import { getUserEvents, getEventsCategories } from "@/services/apiEvents";
 import { EventCardProps } from "@/hooks/definitions";
+import { useAuth } from "./AuthProvider";
 
 interface UserEventsContextType {
   events: EventCardProps[];

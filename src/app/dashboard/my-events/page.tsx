@@ -8,11 +8,11 @@ import React, { useState } from "react";
 const MyEvents = () => {
   const [showForm, setShowForm] = useState(false);
 
-  if (showForm) return <NewEventForm setShowForm={setShowForm} />;
   return (
     <div className="">
       <EventStats />
       <AddNewEvent setShowForm={setShowForm} />
+      {showForm && <NewEventForm setShowForm={setShowForm} />}
     </div>
   );
 };

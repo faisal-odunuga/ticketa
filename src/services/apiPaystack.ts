@@ -9,5 +9,4 @@ export const verifyPayment = async (reference: string) => {
   }
   const jsonData = typeof data === "string" ? JSON.parse(data) : data;
   return { jsonData, error };
-  console.log(data);
 };

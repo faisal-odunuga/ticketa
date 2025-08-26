@@ -74,33 +74,36 @@ export async function getEventsCategories() {
 }
 
 export const createEvent = async (newEvent: NewEventFormValues) => {
-  // Image Uploading
-
+  // Extract file
   const file = (newEvent.bannerUrl as unknown as FileList)?.[0];
+  if (!file) throw new Error("Banner image is required");
+
   const fileName = `${newEvent.title}-${Date.now()}`;
 
-  const { data, error } = await supabase.storage
+  const { error: uploadError } = await supabase.storage
     .from("event-images")
     .upload(fileName, file);
-  if (error) {
-    console.error(error);
+
+  if (uploadError) {
+    console.error(uploadError);
     throw new Error("Error uploading image");
   }
 
   const formattedEvent = {
     ...newEvent,
-    startDate: newEvent.startDate,
-    endDate: newEvent.endDate,
     bannerUrl: `${bucketUrl}/${fileName}`,
   };
 
-  const { data: createdEvent, error: eventError } = await supabase
+  const { data, error: eventError } = await supabase
     .from("events")
-    .insert([formattedEvent]);
+    .insert([formattedEvent])
+    .select()
+    .single();
 
   if (eventError) {
     console.error(eventError);
     throw new Error("Event could not be created");
   }
-  return createdEvent;
+
+  return data;
 };

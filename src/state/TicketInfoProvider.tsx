@@ -2,8 +2,8 @@
 import React, { createContext, useContext, ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUserTickets } from "@/services/apiTicket";
-import { useAuth } from "@/hooks/useAuth";
 import { UserWithProfile, TicketProps } from "@/hooks/definitions";
+import { useAuth } from "./AuthProvider";
 
 interface TicketsContextType {
   user: UserWithProfile | null;
@@ -27,7 +27,7 @@ export const TicketInfoProvider = ({ children }: { children: ReactNode }) => {
     refetch,
   } = useQuery({
     queryKey: ["tickets", user?.id],
-    queryFn: () => getUserTickets(user!.id),
+    queryFn: () => (user ? getUserTickets(user.id) : Promise.resolve([])),
     enabled: !!user && !authLoading,
   });
 

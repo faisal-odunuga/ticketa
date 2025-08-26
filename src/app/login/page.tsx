@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Button from "@/components/ui/button/Button";
 import FormInput from "@/components/ui/form-input/FormInput";
 import { userLoginIn, signInWithGoogle } from "@/services/apiAuth";
@@ -9,24 +9,37 @@ import { SignInFormValues } from "@/hooks/definitions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 const SignIn = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<SignInFormValues>();
+
   const router = useRouter();
-  const onSubmit: SubmitHandler<SignInFormValues> = async (formData) => {
-    const { error } = await userLoginIn(formData);
 
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
+  // ✅ mutationFn must return a Promise
+  const mutation = useMutation({
+    mutationFn: async (formData: SignInFormValues) => {
+      const { error } = await userLoginIn(formData);
+      if (error) {
+        throw new Error(error.message);
+      }
+      return true;
+    },
+    onSuccess: () => {
+      toast.success("Login successful!");
+      router.push("/dashboard");
+    },
+    onError: (err: Error) => {
+      toast.error(err.message);
+    },
+  });
 
-    toast.success("Login successful!");
-    router.push("/dashboard"); // 👈 redirect to dashboard or homepage
+  const onSubmit = (formData: SignInFormValues) => {
+    mutation.mutate(formData);
   };
 
   return (
@@ -94,8 +107,8 @@ const SignIn = () => {
 
             <Button
               type="submit"
-              btnText={isSubmitting ? "Signing In..." : "Sign In"}
-              loading={isSubmitting}
+              btnText={mutation.isPending ? "Signing In..." : "Sign In"}
+              loading={mutation.isPending}
               className={"w-full"}
             />
           </form>

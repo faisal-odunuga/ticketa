@@ -1,30 +1,56 @@
 "use client";
 import Button from "@/components/ui/button/Button";
 import FormInput from "@/components/ui/form-input/FormInput";
+import Loader from "@/components/ui/loader/Loader";
 import SelectInput from "@/components/ui/select-input/SelectInput";
 import { NewEventFormValues, ToggleFormProps } from "@/hooks/definitions";
 import { createEvent } from "@/services/apiEvents";
+import { useMutation } from "@tanstack/react-query";
 import React from "react";
-import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
-  const { register, handleSubmit, control } = useForm<NewEventFormValues>({
-    defaultValues: {
-      ticketTypes: [{ name: "Regular", price: 0, total_tickets: 0 }], // one default ticket
-    },
-  });
+  const { register, handleSubmit, control, reset } =
+    useForm<NewEventFormValues>({
+      defaultValues: {
+        ticketTypes: [
+          { name: "Regular", price: 0, sold_tickets: 0, total_tickets: 0 },
+        ],
+      },
+    });
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "ticketTypes",
   });
 
-  const onSubmit: SubmitHandler<NewEventFormValues> = (data) => {
-    createEvent(data);
+  const mutation = useMutation({
+    mutationFn: createEvent,
+    onSuccess: () => {
+      toast.success("Event created successfully!");
+      setShowForm(false);
+      reset();
+    },
+    onError: (err: Error) => {
+      toast.error(err.message);
+    },
+  });
+
+  const onSubmit = (data: NewEventFormValues) => {
+    mutation.mutate(data);
   };
 
+  if (mutation.isPending) {
+    return (
+      <div className="w-full h-full">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
-    <section className="bg-white max-w-4xl mx-auto rounded-lg border bg-card text-card-foreground shadow-sm">
+    <section className="bg-white max-w-4xl mx-auto rounded-lg border shadow-sm">
       <header className="flex flex-col space-y-1.5 p-6">
         <h3 className="font-semibold tracking-tight text-2xl">
           Create New Event
@@ -109,7 +135,7 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
                   placeholder="Describe your event..."
                   required
                   rows={4}
-                  className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="flex min-h-[80px] w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2"
                   {...register("description")}
                 ></textarea>
               </div>
@@ -184,15 +210,6 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
                 label="Upload Image banner (Max 1MB, only images)"
                 {...register("bannerUrl")}
               />
-
-              {/* <FormInput
-                id="organizer"
-                type="text"
-                placeholder="Your organization name"
-                required
-                label="Organizer Name"
-                {...register("organizer")}
-              /> */}
             </div>
           </div>
 
@@ -202,7 +219,11 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
               btnText="Cancel"
               onClick={() => setShowForm(false)}
             />
-            <Button type="submit" btnText="Create Event" />
+            <Button
+              type="submit"
+              btnText={mutation.isPending ? "Creating..." : "Create Event"}
+              loading={mutation.isPending}
+            />
           </div>
         </form>
       </main>
