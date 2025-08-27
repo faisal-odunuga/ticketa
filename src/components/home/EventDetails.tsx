@@ -26,6 +26,7 @@ export default function EventDetailsClient({
     router.push(`/order-summary?event_id=${event?.event_id}`);
   };
   const { totalTickets, soldTickets } = getTicketCount(event.ticketTypes);
+  const isSoldOut = totalTickets === soldTickets;
 
   return (
     <div className="flex items-center justify-center">
@@ -140,9 +141,13 @@ export default function EventDetailsClient({
                 </div>
               ))}
               <Button
-                btnText="Buy Now"
-                className="w-full"
-                onClick={handleTicketPurchase}
+                btnText={isSoldOut ? "Sold Out" : "Buy Now"}
+                className={`${
+                  isSoldOut
+                    ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
+                    : ""
+                } w-full`}
+                onClick={!isSoldOut ? handleTicketPurchase : undefined}
               />
               <p className="text-xs text-gray-500 text-center">
                 Secure checkout powered by Ticketa

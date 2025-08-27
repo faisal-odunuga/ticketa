@@ -58,7 +58,9 @@ const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
             <svg className="h-4 w-4 text-gray-400"></svg>
             <div>
               <p className="font-medium text-gray-900">Ticket Type</p>
-              <p className="text-gray-600">General Admission</p>
+              <p className="text-gray-600">
+                {ticket.ticket_type.toUpperCase()}
+              </p>
             </div>
           </div>
 

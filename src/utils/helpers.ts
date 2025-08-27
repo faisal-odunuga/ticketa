@@ -75,3 +75,11 @@ export const getTicketCount = (tickets: TicketType[]) => {
   const soldTickets = tickets.reduce((acc, curr) => acc + curr.sold_tickets, 0);
   return { totalTickets, soldTickets };
 };
+
+export const generateTicketCode = (event: EventCardProps) => {
+  const prefix = event.event_code || event.title.substring(0, 3).toUpperCase();
+  const year = new Date(event.startDate).getFullYear();
+  const { soldTickets } = getTicketCount(event.ticketTypes);
+  const paddedNumber = String(soldTickets + 1).padStart(3, "0");
+  return `${prefix}-${year}-${paddedNumber}`;
+};

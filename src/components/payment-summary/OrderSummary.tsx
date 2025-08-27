@@ -3,29 +3,32 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import FormInput from "@/components/ui/form-input/FormInput";
 import Image from "next/image";
-import { EventCardProps, PaystackResponse } from "@/hooks/definitions";
+import {
+  CustomerInfo,
+  EventCardProps,
+  PaystackResponse,
+} from "@/hooks/definitions";
 import { GrLocation } from "react-icons/gr";
 import { CiCalendar } from "react-icons/ci";
-import { getDate, getTime, SentenseCase } from "@/utils/helpers";
+import {
+  generateTicketCode,
+  getDate,
+  getTime,
+  SentenseCase,
+} from "@/utils/helpers";
 import SelectInput from "../ui/select-input/SelectInput";
 import { useMemo } from "react";
 import Button from "../ui/button/Button";
-import { useAuth } from "@/hooks/useAuth";
 import { IoTicketSharp } from "react-icons/io5";
 import { usePaystackPayment } from "react-paystack";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/state/AuthProvider";
+import { createTicket, updateTicketCount } from "@/services/apiTicket";
 
-interface CustomerInfo {
-  fullName: string;
-  email: string;
-  gender: string;
-  ticket_type: string;
-  price: number;
-  number: number;
-}
 interface EventInfo {
   event: EventCardProps | null;
 }
+
 export default function OrderSummary({ event }: EventInfo) {
   const {
     register,
@@ -35,7 +38,6 @@ export default function OrderSummary({ event }: EventInfo) {
   } = useForm<CustomerInfo>({ mode: "onChange" });
 
   const router = useRouter();
-
   const ticket_type = watch("ticket_type");
   const email = watch("email");
   const name = watch("fullName");
@@ -67,9 +69,9 @@ export default function OrderSummary({ event }: EventInfo) {
     },
   };
 
-  const onSuccess = (reference: PaystackResponse) => {
-    router.push(`/payment-status${reference.redirecturl}`);
-  };
+  // const onSuccess = (reference: PaystackResponse) => {
+  //   router.push(`/payment-status${reference.redirecturl}`);
+  // };
 
   const onClose = () => {
     console.log("Payment popup closed");
@@ -83,10 +85,17 @@ export default function OrderSummary({ event }: EventInfo) {
       price: selectedTicket?.price || 0,
       event_id: event?.event_id,
       user_id: user?.id,
+      ticket_number: generateTicketCode(event),
     };
+
     if (isValid) {
       initializePayment({
-        onSuccess,
+        onSuccess: (reference: PaystackResponse) => {
+          createTicket(payload); // ✅ creat ticket record in supabase access
+          updateTicketCount(event?.event_id || "", selectedTicket?.name || ""); // ✅ update ticket quantitiy event
+          router.push(`/payment-status${reference.redirecturl}`);
+        },
+
         onClose,
       });
     }

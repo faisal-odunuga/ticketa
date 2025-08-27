@@ -18,6 +18,8 @@ const EventCard = ({ event }: { event: EventCardProps }) => {
           width={600}
           height={300}
           className="w-full h-48 object-cover"
+          loading="lazy"
+          loader={() => event.bannerUrl}
         />
 
         <div className="inline-flex items-center rounded-full absolute top-4 left-4 bg-blue-600 text-white px-2.5 py-0.5 text-xs font-semibold hover:bg-black/50">
@@ -68,9 +70,20 @@ const EventCard = ({ event }: { event: EventCardProps }) => {
             }}
           ></div>
         </div>
-
         <Link href={`/event-details/${event.event_id}`} className="block">
-          <Button btnText="View Details & Buy Tickets" className="w-full" />
+          <Button
+            btnText={`${
+              soldTickets === totalTickets
+                ? "Sold Out"
+                : "View Details & Buy Tickets"
+            }`}
+            className={`w-full ${
+              soldTickets === totalTickets
+                ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600"
+            }`}
+            disabled={soldTickets === totalTickets}
+          />
         </Link>
       </div>
     </div>

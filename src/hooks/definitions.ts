@@ -29,7 +29,7 @@ export interface TicketType {
   name: string;
   price: number;
   sold_tickets?: number;
-  total_tickets: number;
+  total_tickets?: number;
 }
 
 export interface EventDetails {
@@ -68,11 +68,12 @@ export interface EventCardProps {
   category: string;
   startDate: string | Date; // ISO string
   endDate: string | Date;
-  ticketTypes: TicketType[]; // JSON.stringify([...])
+  ticketTypes: TicketType[];
   bannerUrl?: string; // public URL
   status: string;
   maxCapacity?: number;
   organizer: string;
+  event_code: string;
 }
 
 export interface TicketProps {
@@ -82,6 +83,15 @@ export interface TicketProps {
   ticket_type: string;
   amount: number;
   event: EventDetails;
+}
+
+export interface CustomerInfo {
+  fullName: string;
+  email: string;
+  gender: string;
+  ticket_type: string;
+  price: number;
+  number: number;
 }
 
 export interface StatItem {
@@ -108,3 +118,11 @@ export interface PaystackResponse {
   trxref: string; // Transaction reference (same as reference)
   redirecturl: string; // URL to redirect the user after payment
 }
+
+export type TicketInput = {
+  ticket_number: string;
+  ticket_type: string;
+  user_id: string;
+  event_id: string;
+  price: number;
+};
