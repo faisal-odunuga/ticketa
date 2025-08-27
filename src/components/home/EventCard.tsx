@@ -19,7 +19,6 @@ const EventCard = ({ event }: { event: EventCardProps }) => {
           height={300}
           className="w-full h-48 object-cover"
           loading="lazy"
-          loader={() => event.bannerUrl}
         />
 
         <div className="inline-flex items-center rounded-full absolute top-4 left-4 bg-blue-600 text-white px-2.5 py-0.5 text-xs font-semibold hover:bg-black/50">

@@ -3,6 +3,7 @@ import { getFormattedDate, getTime, SentenseCase } from "@/utils/helpers";
 import { HiOutlineMail } from "react-icons/hi";
 import { MdOutlineFileDownload } from "react-icons/md";
 import Button from "../button/Button";
+import Link from "next/link";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -80,11 +81,14 @@ const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
         <div className="shrink-0 bg-border h-[1px] w-full my-4"></div>
 
         <div className="flex flex-wrap gap-3">
-          <Button
-            btnText="Download Ticket"
-            hasIcon={<MdOutlineFileDownload />}
-            filled={false}
-          />
+          <Link href={`/download-ticket/${ticket.ticket_id}`}>
+            <Button
+              btnText="Download Ticket"
+              hasIcon={<MdOutlineFileDownload />}
+              filled={false}
+            />
+          </Link>
+
           <Button
             btnText="Email Ticket"
             hasIcon={<HiOutlineMail />}

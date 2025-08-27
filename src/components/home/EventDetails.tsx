@@ -38,6 +38,7 @@ export default function EventDetailsClient({
             width={600}
             height={300}
             className="w-full h-64 object-cover rounded-t-lg border"
+            loading="lazy"
           />
         </div>
 

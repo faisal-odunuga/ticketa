@@ -8,13 +8,16 @@ const TicketsPage = () => {
   return (
     <section>
       <h2 className="text-2xl font-bold mb-4">My Tickets ({ticketCount})</h2>
-      {tickets.length > 0 ? (
-        tickets.map((ticket, index) => (
-          <TicketCard key={index} ticket={ticket} />
-        ))
-      ) : (
-        <p>No tickets found</p>
-      )}
+      <div className="flex flex-col gap-4">
+        {tickets.length > 0 ? (
+          tickets.map((ticket, index) => (
+            <TicketCard key={index} ticket={ticket} />
+          ))
+        ) : (
+          <p>No tickets found</p>
+        )}
+      </div>
+
       <button
         onClick={() => refetch()}
         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"

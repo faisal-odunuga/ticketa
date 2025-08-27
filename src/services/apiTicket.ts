@@ -1,17 +1,41 @@
 import { TicketInput, TicketType } from "@/hooks/definitions";
 import supabase from "@/lib/supabase";
+import { ParamValue } from "next/dist/server/request/params";
 
 export async function getUserTickets(userId: string) {
   const { data: tickets, error } = await supabase
     .from("tickets")
     .select(
-      `ticket_number,ticket_type,status,qr_code,price,event:events(event_id, title, startDate, venue, location, ticketTypes)`
+      `ticket_id,ticket_number,ticket_type,status,qr_code,price,event:events(event_id, title, startDate, venue, location, ticketTypes)`
     )
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
   if (error) throw new Error("Error fetching tickets");
   return tickets;
+}
+
+export async function getUserTicketById(
+  userId: string,
+  ticketId: string | ParamValue
+) {
+  const { data: ticket, error } = await supabase
+    .from("tickets")
+    .select(
+      `ticket_id,
+      ticket_number,
+       ticket_type,
+       status,
+       qr_code,
+       price,
+       event:events(event_id, title, startDate, venue, location, ticketTypes)`
+    )
+    // .eq("user_id", userId) // ensure it belongs to the current user
+    .eq("ticket_id", ticketId) // fetch specific ticket
+    .single(); // only one result expected
+
+  if (error) throw new Error("Error fetching ticket");
+  return ticket;
 }
 
 export const createTicket = async (ticket: TicketInput) => {
@@ -46,7 +70,6 @@ export async function updateTicketCount(event_id: string, ticketName: string) {
     .select("ticketTypes")
     .eq("event_id", event_id)
     .single();
-  console.log("I got here", event);
 
   if (fetchError) {
     console.error(fetchError);
@@ -58,7 +81,6 @@ export async function updateTicketCount(event_id: string, ticketName: string) {
     typeof event.ticketTypes === "string"
       ? JSON.parse(event.ticketTypes)
       : event.ticketTypes;
-  console.log("I got here too", tickets);
 
   // 3. Update the correct ticket type
   const updatedTickets = tickets.map((t: TicketType) => {
@@ -70,7 +92,6 @@ export async function updateTicketCount(event_id: string, ticketName: string) {
     }
     return t;
   });
-  console.log("I got here too", updatedTickets);
 
   // 4. Save back to DB
   const { data: updatedEvent, error: updateError } = await supabase
@@ -83,7 +104,6 @@ export async function updateTicketCount(event_id: string, ticketName: string) {
     console.error(updateError);
     throw new Error("Failed to update tickets");
   }
-  console.log(updatedEvent);
 
   return updatedEvent;
 }
