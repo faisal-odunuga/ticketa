@@ -1,4 +1,5 @@
 import GoBack from "@/components/ui/go-back/GoBack";
+import Header from "@/components/ui/header";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,7 +14,8 @@ export default function Layout({
 }>) {
   return (
     <main className={`p-6 relative`}>
-      <div className="mb-4 sticky top-4 z-20">
+      <Header />
+      <div className="fixed z-20">
         <GoBack />
       </div>
 

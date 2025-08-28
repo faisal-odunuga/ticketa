@@ -124,8 +124,13 @@ export default function PaymentStatus() {
               <span className="font-semibold">Paid At</span>{" "}
               {new Date(paymentData.paid_at).toLocaleString()}
             </p>
-
-            <Button onClick={() => router.push("/")} btnText="Go to Home" />
+            <div className="flex gap-2">
+              <Button onClick={() => router.push("/")} btnText="Go to Home" />
+              <Button
+                onClick={() => router.push("/dashboard")}
+                btnText="Go to Dashboard"
+              />
+            </div>
           </div>
         )}
 

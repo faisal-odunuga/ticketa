@@ -6,7 +6,6 @@ export async function signInWithGoogle() {
     provider: "google",
     options: {
       redirectTo: `${window.location.origin}/auth/callback`,
-      // redirectTo: "/dashboard",
     },
   });
   if (error) console.error("Login error:", error.message);
@@ -17,6 +16,9 @@ export async function userLoginIn({ email, password }: SignInFormValues) {
     email,
     password,
   });
+
+  if (error) console.error("Login error:", error.message);
+
   return { data, error };
 }
 export async function userSignUp(formData: SignUpFormValues) {
@@ -77,4 +79,41 @@ export async function signOut() {
   const { error } = await supabase.auth.signOut();
   if (error) console.error("Logout error:", error.message);
   return error?.message;
+}
+
+export async function handleOAuthCallback() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("No user found after Google OAuth");
+  }
+
+  // Check if user already exists in your custom table
+  const { data: existingUser, error: fetchError } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", user.id)
+    .single();
+
+  if (fetchError && fetchError.code !== "PGRST116") {
+    // Some other DB error
+    console.error("Fetch error:", fetchError.message);
+    return;
+  }
+
+  if (!existingUser) {
+    // Insert new user into profiles
+    const { error: insertError } = await supabase.from("profiles").insert({
+      user_id: user.id,
+      name: user.user_metadata.full_name ?? user.email, // Google gives this in metadata
+      email: user.email,
+      avatar_url: user.user_metadata.picture ?? null,
+    });
+
+    if (insertError) {
+      console.error("Insert error:", insertError.message);
+    }
+  }
 }

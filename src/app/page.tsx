@@ -11,7 +11,7 @@ export default async function Home({
   const category = searchParams.category || "";
 
   return (
-    <div className="font-sans">
+    <div className="font-sans relative">
       <Header />
       <LandingPage />
       <Events search={search} category={category} />

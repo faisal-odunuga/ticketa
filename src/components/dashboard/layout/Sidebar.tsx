@@ -1,3 +1,4 @@
+import Logo from "@/components/ui/logo/Logo";
 import { dashboardMenu } from "@/lib/allLinks";
 import { signOut } from "@/services/apiAuth";
 import Link from "next/link";
@@ -35,7 +36,7 @@ const Sidebar = ({ isSidebarOpen, setSidebarOpen }: SidebarProps) => {
             <IoMdClose className="w-7 h-7" />
           </span>
         )}
-        <h1>Ticketa</h1>
+        <Logo />
       </div>
       <nav className="flex-1 py-4 px-3 space-y-2 overflow-y-auto">
         {dashboardMenu.map(({ icon: Icon, label, to }) => (

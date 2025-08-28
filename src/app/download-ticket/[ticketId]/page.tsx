@@ -26,30 +26,6 @@ const TicketPDF = () => {
     enabled: !!user, // prevent running if no user
   });
 
-  // const options: Options = {
-  //   method: "open",
-  //   filename: `TICKET-${ticket?.ticket_number}.pdf`,
-  //   resolution: Resolution.MEDIUM,
-  //   page: {
-  //     margin: Margin.MEDIUM,
-  //     format: [150, 150],
-  //     orientation: "portrait",
-  //   },
-  //   canvas: {
-  //     mimeType: "image/png",
-  //     qualityRatio: 1,
-  //   },
-  //   overrides: {
-  //     pdf: {
-  //       compress: true,
-  //     },
-  //     canvas: {
-  //       useCORS: true,
-  //     },
-  //   },
-  // };
-  // const getTargetElement = () => document.getElementById("ticket");
-
   if (!ticket) return <div>Ticket not found</div>;
   if (isLoading)
     return (
