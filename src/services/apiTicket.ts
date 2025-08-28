@@ -46,6 +46,8 @@ export const createTicket = async (ticket: TicketInput) => {
     price: ticket.price,
     user_id: ticket.user_id || null,
     event_id: ticket.event_id,
+    user_name: ticket.user_name,
+    user_phone_number: ticket.user_phone_number,
   };
 
   const { data: newTicket, error: ticketError } = await supabase

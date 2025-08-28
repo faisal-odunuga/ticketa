@@ -29,7 +29,7 @@ const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
           </div>
           <div className="text-right">
             <p className="text-2xl font-bold text-blue-600">
-              #{ticket.event.ticketTypes[0].price.toLocaleString()}
+              {ticket.price.toLocaleString()}
             </p>
           </div>
         </div>

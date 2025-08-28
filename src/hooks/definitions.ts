@@ -82,8 +82,10 @@ export interface TicketProps {
   status?: string;
   ticket_number?: string;
   ticket_type: string;
-  amount: number;
+  price: number;
   event: EventDetails;
+  user_name: string;
+  user_phone_number: string;
 }
 
 export interface CustomerInfo {
@@ -126,4 +128,6 @@ export type TicketInput = {
   user_id: string;
   event_id: string;
   price: number;
+  user_name: string;
+  user_phone_number: string;
 };
