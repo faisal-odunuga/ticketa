@@ -44,11 +44,9 @@ export const createTicket = async (ticket: TicketInput) => {
     qr_code: null,
     ticket_type: ticket.ticket_type,
     price: ticket.price,
-    user_id: ticket.user_id,
+    user_id: ticket.user_id || null,
     event_id: ticket.event_id,
   };
-
-  console.log(formattedTicket);
 
   const { data: newTicket, error: ticketError } = await supabase
     .from("tickets")
