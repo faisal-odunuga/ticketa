@@ -9,7 +9,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { HiOutlineMail } from "react-icons/hi";
 import { MdOutlineFileDownload } from "react-icons/md";
-import generatePDF, { Resolution, Margin, Options } from "react-to-pdf";
 
 const statusColor = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -27,29 +26,29 @@ const TicketPDF = () => {
     enabled: !!user, // prevent running if no user
   });
 
-  const options: Options = {
-    method: "save",
-    filename: `TICKET-${ticket?.ticket_number}.pdf`,
-    resolution: Resolution.MEDIUM,
-    page: {
-      margin: Margin.MEDIUM,
-      format: [150, 150],
-      orientation: "portrait",
-    },
-    canvas: {
-      mimeType: "image/png",
-      qualityRatio: 1,
-    },
-    overrides: {
-      pdf: {
-        compress: true,
-      },
-      canvas: {
-        useCORS: true,
-      },
-    },
-  };
-  const getTargetElement = () => document.getElementById("ticket");
+  // const options: Options = {
+  //   method: "open",
+  //   filename: `TICKET-${ticket?.ticket_number}.pdf`,
+  //   resolution: Resolution.MEDIUM,
+  //   page: {
+  //     margin: Margin.MEDIUM,
+  //     format: [150, 150],
+  //     orientation: "portrait",
+  //   },
+  //   canvas: {
+  //     mimeType: "image/png",
+  //     qualityRatio: 1,
+  //   },
+  //   overrides: {
+  //     pdf: {
+  //       compress: true,
+  //     },
+  //     canvas: {
+  //       useCORS: true,
+  //     },
+  //   },
+  // };
+  // const getTargetElement = () => document.getElementById("ticket");
 
   if (!ticket) return <div>Ticket not found</div>;
   if (isLoading)
@@ -59,11 +58,8 @@ const TicketPDF = () => {
       </div>
     );
   return (
-    <main className="flex flex-col gap-10 items-center justify-center min-h-screen p-10">
-      <div
-        className="flex flex-col border-4 max-w-3xl h-full relative"
-        id="ticket"
-      >
+    <main className="flex flex-col gap-10 items-center justify-center min-h-screen p-4 md:p-10">
+      <div className="w-full mx-auto flex flex-col border-4 max-w-3xl h-full relative">
         <div className="absolute bottom-2 right-4">
           <h1 className="font-bold text-blue-600 text-sm">
             Powered by Ticketa
@@ -90,7 +86,7 @@ const TicketPDF = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="flex items-center space-x-3">
               <svg className="h-4 w-4 text-gray-400"></svg>
               <div>
@@ -149,12 +145,11 @@ const TicketPDF = () => {
           </p>
         </div>
       </div>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-3 no-print">
         <Button
           btnText="Download Ticket"
           hasIcon={<MdOutlineFileDownload />}
-          // onClick={() => toPDF()}
-          onClick={() => generatePDF(getTargetElement, options)}
+          onClick={() => window.print()}
           filled={false}
         />
         <Button
