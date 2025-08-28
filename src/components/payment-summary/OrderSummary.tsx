@@ -84,7 +84,7 @@ export default function OrderSummary({ event }: EventInfo) {
       ...data,
       price: selectedTicket?.price || 0,
       event_id: event?.event_id,
-      user_id: user?.id,
+      user_id: user?.id || null,
       ticket_number: generateTicketCode(event),
     };
 
