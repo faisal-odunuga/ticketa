@@ -30,7 +30,7 @@ export async function getUserTicketById(
        price,
        event:events(event_id, title, startDate, venue, location, ticketTypes)`
     )
-    // .eq("user_id", userId) // ensure it belongs to the current user
+    .eq("user_id", userId) // ensure it belongs to the current user
     .eq("ticket_id", ticketId) // fetch specific ticket
     .single(); // only one result expected
 

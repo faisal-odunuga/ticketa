@@ -296,7 +296,7 @@ export default function OrderSummary({ event }: EventInfo) {
               <div className="p-6 pt-0 space-y-3">
                 <div className="flex justify-between">
                   <span>{SentenseCase(ticket_type)}</span>
-                  <span>₦{selectedTicket?.price || 0}</span>
+                  <span>₦{selectedTicket?.price.toLocaleString() || 0}</span>
                 </div>
 
                 <div className="flex justify-between text-sm text-gray-600">
@@ -307,7 +307,7 @@ export default function OrderSummary({ event }: EventInfo) {
                 <div className="border-t pt-3">
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Total</span>
-                    <span>₦{selectedTicket?.price || 0}</span>
+                    <span>₦{selectedTicket?.price.toLocaleString() || 0}</span>
                   </div>
                 </div>
 

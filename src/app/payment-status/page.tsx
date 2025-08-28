@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/components/ui/button/Button";
 import supabase from "@/lib/supabase";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -105,6 +106,9 @@ export default function PaymentStatus() {
             <p className="text-green-600 font-semibold text-lg">
               ✅ Payment Successful
             </p>
+            <p className="font-semibold text-lg">
+              The download link will be sent to you via email
+            </p>
             <p className="text-gray-700">
               <span className="font-semibold">Name:</span>{" "}
               {paymentData.metadata.customer_name}
@@ -121,12 +125,7 @@ export default function PaymentStatus() {
               {new Date(paymentData.paid_at).toLocaleString()}
             </p>
 
-            <button
-              onClick={() => router.push("/")}
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-            >
-              Go to Home
-            </button>
+            <Button onClick={() => router.push("/")} btnText="Go to Home" />
           </div>
         )}
 
