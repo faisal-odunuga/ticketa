@@ -1,4 +1,4 @@
-import { TicketInput, TicketType } from "@/hooks/definitions";
+import { TicketInput, TicketProps, TicketType } from "@/hooks/definitions";
 import supabase from "@/lib/supabase";
 import { ParamValue } from "next/dist/server/request/params";
 
@@ -60,7 +60,7 @@ export const createTicket = async (ticket: TicketInput) => {
     console.error(ticketError);
     throw new Error("Error generating ticket");
   }
-  return newTicket;
+  return newTicket as TicketProps;
 };
 
 export async function updateTicketCount(event_id: string, ticketName: string) {
@@ -106,4 +106,16 @@ export async function updateTicketCount(event_id: string, ticketName: string) {
   }
 
   return updatedEvent;
+}
+
+export async function purchaseTicket(
+  payload,
+  reference,
+  selectedTicket,
+  event
+) {
+  const newTicket = createTicket(payload);
+
+  updateTicketCount(event?.event_id || "", selectedTicket?.name || ""); // ✅ update ticket quantitiy event
+  return newTicket;
 }

@@ -9,6 +9,9 @@ import Button from "../ui/button/Button";
 
 const EventCard = ({ event }: { event: EventCardProps }) => {
   const { totalTickets, soldTickets } = getTicketCount(event.ticketTypes);
+
+  const isSoldOut = soldTickets >= totalTickets;
+
   return (
     <div className="rounded-lg border shadow-sm cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden">
       <div className="relative">
@@ -71,17 +74,13 @@ const EventCard = ({ event }: { event: EventCardProps }) => {
         </div>
         <Link href={`/event-details/${event.event_id}`} className="block">
           <Button
-            btnText={`${
-              soldTickets === totalTickets
-                ? "Sold Out"
-                : "View Details & Buy Tickets"
-            }`}
+            btnText={`${isSoldOut ? "Sold Out" : "View Details & Buy Tickets"}`}
             className={`w-full ${
-              soldTickets === totalTickets
+              isSoldOut
                 ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
                 : "bg-blue-600"
             }`}
-            disabled={soldTickets === totalTickets}
+            disabled={isSoldOut}
           />
         </Link>
       </div>

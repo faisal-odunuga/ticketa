@@ -2,8 +2,10 @@
 
 import Button from "@/components/ui/button/Button";
 import supabase from "@/lib/supabase";
+import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { MdOutlineFileDownload } from "react-icons/md";
 
 interface PaymentData {
   status: string;
@@ -23,6 +25,7 @@ export default function PaymentStatus() {
 
   const trxref = searchParams.get("trxref");
   const reference = searchParams.get("reference");
+  const ticketId = searchParams.get("ticketId");
 
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
@@ -102,7 +105,7 @@ export default function PaymentStatus() {
         )}
 
         {status === "success" && paymentData && (
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2 items-center">
             <p className="text-green-600 font-semibold text-lg">
               ✅ Payment Successful
             </p>
@@ -124,12 +127,15 @@ export default function PaymentStatus() {
               <span className="font-semibold">Paid At</span>{" "}
               {new Date(paymentData.paid_at).toLocaleString()}
             </p>
-            <div className="flex gap-2">
+            <div className="flex gap-2 ">
               <Button onClick={() => router.push("/")} btnText="Go to Home" />
-              <Button
-                onClick={() => router.push("/dashboard")}
-                btnText="Go to Dashboard"
-              />
+              <Link href={`/download-ticket/${ticketId}`}>
+                <Button
+                  btnText="Download Ticket"
+                  hasIcon={<MdOutlineFileDownload />}
+                  filled={false}
+                />
+              </Link>
             </div>
           </div>
         )}

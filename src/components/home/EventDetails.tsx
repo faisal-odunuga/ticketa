@@ -26,7 +26,7 @@ export default function EventDetailsClient({
     router.push(`/order-summary?event_id=${event?.event_id}`);
   };
   const { totalTickets, soldTickets } = getTicketCount(event.ticketTypes);
-  const isSoldOut = totalTickets === soldTickets;
+  const isSoldOut = soldTickets >= totalTickets;
 
   return (
     <div className="flex items-center justify-center">
@@ -82,9 +82,9 @@ export default function EventDetailsClient({
               <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
                 <LuUsers className="h-5 w-5 text-blue-600" />
                 <div>
-                  <h3 className="font-medium text-gray-900">Availability</h3>
+                  <h3 className="font-bold text-gray-900">Availability</h3>
                   <p className="text-gray-600">
-                    {soldTickets} tickets left of {totalTickets} total
+                    {soldTickets} tickets sold of {totalTickets} total tickets
                   </p>
                 </div>
               </div>

@@ -12,8 +12,18 @@ export default async function OrderSummaryPage({
   const { totalTickets, soldTickets } = getTicketCount(event.ticketTypes);
   const isSoldOut = totalTickets === soldTickets;
 
-  if (!event) return <p>Event not found</p>;
-  if (isSoldOut) return <p>Tickets are sold out</p>;
+  if (!event)
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <h2>Event not found</h2>
+      </div>
+    );
+  if (isSoldOut)
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <h2 className="text-red-600 text-2xl">Tickets are sold out</h2>
+      </div>
+    );
 
   return <OrderSummary event={event} />;
 }

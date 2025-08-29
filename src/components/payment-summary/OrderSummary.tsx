@@ -23,7 +23,7 @@ import { IoTicketSharp } from "react-icons/io5";
 import { usePaystackPayment } from "react-paystack";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/state/AuthProvider";
-import { createTicket, updateTicketCount } from "@/services/apiTicket";
+import { purchaseTicket } from "@/services/apiTicket";
 
 interface EventInfo {
   event: EventCardProps | null;
@@ -69,10 +69,6 @@ export default function OrderSummary({ event }: EventInfo) {
     },
   };
 
-  // const onSuccess = (reference: PaystackResponse) => {
-  //   router.push(`/payment-status${reference.redirecturl}`);
-  // };
-
   const onClose = () => {
     console.log("Payment popup closed");
   };
@@ -87,15 +83,25 @@ export default function OrderSummary({ event }: EventInfo) {
       user_id: user?.id || null,
       ticket_number: generateTicketCode(event),
       user_name: name,
-      user_phone_number: phone,
+      user_phone_number: phone.toString(),
     };
 
     if (isValid) {
       initializePayment({
-        onSuccess: (reference: PaystackResponse) => {
-          createTicket(payload); // ✅ creat ticket record in supabase access
-          updateTicketCount(event?.event_id || "", selectedTicket?.name || ""); // ✅ update ticket quantitiy event
-          router.push(`/payment-status${reference.redirecturl}`);
+        onSuccess: async (reference: PaystackResponse) => {
+          try {
+            const ticket = await purchaseTicket(
+              payload,
+              reference,
+              selectedTicket,
+              event
+            );
+            router.push(
+              `/payment-status${reference.redirecturl}&ticketId=${ticket.ticket_id}`
+            );
+          } catch (error) {
+            console.error("Error creating ticket:", error);
+          }
         },
 
         onClose,
