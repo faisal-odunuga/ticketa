@@ -15,10 +15,7 @@ export async function getUserTickets(userId: string) {
   return tickets;
 }
 
-export async function getUserTicketById(
-  userId: string,
-  ticketId: string | ParamValue
-) {
+export async function getUserTicketById(ticketId: string | ParamValue) {
   const { data: ticket, error } = await supabase
     .from("tickets")
     .select(
@@ -30,7 +27,6 @@ export async function getUserTicketById(
        price,
        event:events(event_id, title, startDate, venue, location, ticketTypes)`
     )
-    .eq("user_id", userId) // ensure it belongs to the current user
     .eq("ticket_id", ticketId) // fetch specific ticket
     .single(); // only one result expected
 

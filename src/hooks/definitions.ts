@@ -81,11 +81,11 @@ export interface TicketProps {
   qr_code?: string;
   status?: string;
   ticket_number?: string;
-  ticket_type: string;
-  price: number;
-  event: EventDetails;
-  user_name: string;
-  user_phone_number: string;
+  ticket_type?: string;
+  price?: number;
+  event?: EventDetails;
+  user_name?: string;
+  user_phone_number?: string;
 }
 
 export interface CustomerInfo {

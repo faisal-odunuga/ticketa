@@ -3,7 +3,6 @@ import Button from "@/components/ui/button/Button";
 import Loader from "@/components/ui/loader/Loader";
 import { TicketProps } from "@/hooks/definitions";
 import { getUserTicketById } from "@/services/apiTicket";
-import { useAuth } from "@/state/AuthProvider";
 import { getFormattedDate, getTime, SentenseCase } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -18,15 +17,12 @@ const statusColor = {
 
 const TicketPDF = () => {
   const { ticketId } = useParams();
-  const { user } = useAuth();
   const { data: ticket, isLoading } = useQuery<TicketProps | null, Error>({
-    queryKey: ["ticket", user?.id, ticketId],
-    queryFn: () =>
-      user ? getUserTicketById(user.id, ticketId) : Promise.resolve(null),
-    enabled: !!user, // prevent running if no user
+    queryKey: ["ticket", ticketId],
+    queryFn: () => getUserTicketById(ticketId) || Promise.resolve(null),
   });
 
-  if (!ticket) return <div>Ticket not found</div>;
+  if (!ticket && !isLoading) return <div>Ticket not found</div>;
   if (isLoading)
     return (
       <div className="w-full h-screen">

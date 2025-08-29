@@ -24,6 +24,7 @@ import { usePaystackPayment } from "react-paystack";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/state/AuthProvider";
 import { purchaseTicket } from "@/services/apiTicket";
+import { toast } from "react-toastify";
 
 interface EventInfo {
   event: EventCardProps | null;
@@ -71,6 +72,7 @@ export default function OrderSummary({ event }: EventInfo) {
 
   const onClose = () => {
     console.log("Payment popup closed");
+    toast.error("Payment cancelled!");
   };
 
   const initializePayment = usePaystackPayment(config);
