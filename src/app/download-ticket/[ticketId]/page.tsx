@@ -29,6 +29,8 @@ const TicketPDF = () => {
         <Loader />
       </div>
     );
+  console.log(ticket);
+
   return (
     <main className="flex flex-col gap-10 items-center justify-center min-h-screen p-4 md:p-10">
       <div className="w-full mx-auto flex flex-col border-4 max-w-3xl h-full relative">
@@ -53,7 +55,7 @@ const TicketPDF = () => {
             </div>
             <div className="text-right">
               <p className="text-2xl font-bold text-blue-600">
-                ₦{ticket.event.ticketTypes[0].price.toLocaleString()}
+                ₦{ticket.price.toLocaleString()}
               </p>
             </div>
           </div>
@@ -67,6 +69,14 @@ const TicketPDF = () => {
                   {getFormattedDate(ticket.event.startDate)} at{" "}
                   {getTime(ticket.event.startDate)}
                 </p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <svg className="h-4 w-4 text-gray-400"></svg>
+              <div>
+                <p className="font-bold text-gray-900">Full Name</p>
+                <p className="text-gray-600">{ticket.user_name}</p>
               </div>
             </div>
 
@@ -117,6 +127,7 @@ const TicketPDF = () => {
           </p>
         </div>
       </div>
+
       <div className="flex flex-wrap gap-3 no-print">
         <Button
           btnText="Download Ticket"

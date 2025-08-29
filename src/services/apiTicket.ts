@@ -21,6 +21,8 @@ export async function getUserTicketById(ticketId: string | ParamValue) {
     .select(
       `ticket_id,
       ticket_number,
+      user_name,
+       user_phone_number,
        ticket_type,
        status,
        qr_code,
