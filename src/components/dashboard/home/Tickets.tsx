@@ -1,10 +1,17 @@
+import Loader from "@/components/ui/loader/Loader";
 import TicketCard from "@/components/ui/ticket/Ticket";
 
 import { useTickets } from "@/state/TicketInfoProvider";
 
 const TicketsPage = () => {
-  const { tickets, ticketCount, refetch } = useTickets();
+  const { tickets, isLoading, error, ticketCount, refetch } = useTickets();
 
+  if (!isLoading) {
+    return <Loader />;
+  }
+  if (error) {
+    return <Loader />;
+  }
   return (
     <section>
       <h2 className="text-2xl font-bold mb-4">My Tickets ({ticketCount})</h2>

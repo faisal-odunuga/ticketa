@@ -12,6 +12,7 @@ interface TicketsContextType {
   isLoading: boolean;
   authLoading: boolean;
   amountSpent: number;
+  error: Error;
 
   refetch: () => void;
 }
@@ -25,6 +26,7 @@ export const TicketInfoProvider = ({ children }: { children: ReactNode }) => {
     data: tickets = [],
     isLoading,
     refetch,
+    error,
   } = useQuery({
     queryKey: ["tickets", user?.id],
     queryFn: () => (user ? getUserTickets(user.id) : Promise.resolve([])),
@@ -38,6 +40,7 @@ export const TicketInfoProvider = ({ children }: { children: ReactNode }) => {
   const value: TicketsContextType = {
     user,
     tickets,
+    error,
     ticketCount: tickets.length,
     isLoading,
     refetch,

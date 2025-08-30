@@ -6,7 +6,11 @@ import Loader from "../ui/loader/Loader";
 import { getFeaturedEvents } from "@/utils/helpers";
 
 const Events = ({ search, category }) => {
-  const { data: events = [], isLoading } = useQuery({
+  const {
+    data: events = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["events", search, category],
     queryFn: () => getAllEvents({ search, category }),
   });
@@ -16,6 +20,12 @@ const Events = ({ search, category }) => {
     return (
       <div className="w-full h-full">
         <Loader />
+      </div>
+    );
+  if (error)
+    return (
+      <div className="w-full h-full flex items-center justify-center p-4 text-red-500 text-3xl bg-inherit">
+        Error: {error.message}
       </div>
     );
   return (
