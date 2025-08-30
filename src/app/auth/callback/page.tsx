@@ -10,6 +10,10 @@ export default function AuthCallback() {
 
   useEffect(() => {
     const handleAuth = async () => {
+      // Ensure profile table is updated
+      await handleOAuthCallback();
+
+      // Now check session
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -22,7 +26,6 @@ export default function AuthCallback() {
     };
 
     handleAuth();
-    handleOAuthCallback();
   }, [router]);
 
   return <p>Redirecting...</p>;

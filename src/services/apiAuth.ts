@@ -109,7 +109,7 @@ export async function handleOAuthCallback() {
       user_id: user.id,
       name: user.user_metadata.full_name ?? user.email, // Google gives this in metadata
       email: user.email,
-      avatar_url: user.user_metadata.picture ?? null,
+      image: user.user_metadata.picture ?? null,
     });
 
     if (insertError) {
