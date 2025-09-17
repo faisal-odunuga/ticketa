@@ -6,7 +6,7 @@ export async function getUserTickets(userId: string) {
   const { data: tickets, error } = await supabase
     .from("tickets")
     .select(
-      `ticket_id,ticket_number,ticket_type,status,qr_code,price,event:events(event_id, title, startDate, venue, location, ticketTypes)`
+      `ticket_id,ticket_number,ticket_type,status,qr_code,price, is_verified, event:events(event_id, title, startDate, venue, location, ticketTypes)`
     )
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
@@ -27,6 +27,7 @@ export async function getUserTicketById(ticketId: string | ParamValue) {
        status,
        qr_code,
        price,
+        is_verified,
        event:events(event_id, title, startDate, venue, location, ticketTypes)`
     )
     .eq("ticket_id", ticketId) // fetch specific ticket

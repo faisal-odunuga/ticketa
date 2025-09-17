@@ -1,14 +1,14 @@
 import { TicketProps } from "@/hooks/definitions";
-import { getFormattedDate, getTime, SentenseCase } from "@/utils/helpers";
+import { getFormattedDate, getTime } from "@/utils/helpers";
 import { HiOutlineMail } from "react-icons/hi";
 import { MdOutlineFileDownload } from "react-icons/md";
 import Button from "../button/Button";
 import Link from "next/link";
+import Image from "next/image";
 
 const statusColor = {
-  pending: "bg-yellow-100 text-yellow-800",
-  success: "bg-green-100 text-green-800",
-  failed: "bg-red-100 text-red-800",
+  verified: "bg-green-100 text-green-800",
+  used: "bg-red-100 text-red-800",
 };
 const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
   return (
@@ -21,10 +21,10 @@ const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
             </h3>
             <div
               className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
-                statusColor[ticket.status.toLowerCase()]
+                statusColor[ticket.is_verified ? "verified" : "used"]
               }`}
             >
-              {SentenseCase(ticket.status)}
+              {ticket.is_verified ? "Verified" : "Not Verified"}
             </div>
           </div>
           <div className="text-right">
@@ -101,7 +101,14 @@ const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
       <div className="lg:w-48 bg-gray-50 p-6 flex flex-col items-center justify-center border-l">
         <div className="w-32 h-32 bg-white border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center mb-3">
           <div className="text-gray-400 text-center">
-            <div className="w-16 h-16 bg-gray-200 rounded mb-2 mx-auto"></div>
+            <div className="w-30 h-30 bg-gray-200 rounded mx-auto">
+              <Image
+                src={ticket?.qr_code}
+                alt="QR Code"
+                width={100}
+                height={100}
+              />
+            </div>
             <p className="text-xs">QR Code</p>
           </div>
         </div>

@@ -3,7 +3,6 @@
 
 import React, { createContext, useContext, ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-
 import { getUserEvents, getEventsCategories } from "@/services/apiEvents";
 import { EventCardProps } from "@/hooks/definitions";
 import { useAuth } from "./AuthProvider";
@@ -16,6 +15,7 @@ interface UserEventsContextType {
   categories: string[];
   isLoadingCategories: boolean;
   refetchCategories: () => void;
+  errorLoadingEvents: Error | null;
 }
 
 const UserEventsContext = createContext<UserEventsContextType | undefined>(
@@ -30,6 +30,7 @@ export const UserEventsProvider = ({ children }: { children: ReactNode }) => {
     data: events = [],
     isLoading: isLoadingEvents,
     refetch: refetchEvents,
+    error: errorLoadingEvents,
   } = useQuery({
     queryKey: ["user-events", user?.id],
     queryFn: () => getUserEvents(user!.id),
@@ -49,6 +50,7 @@ export const UserEventsProvider = ({ children }: { children: ReactNode }) => {
   const value: UserEventsContextType = {
     events,
     eventCount: events.length,
+    errorLoadingEvents,
     isLoadingEvents,
     refetchEvents,
     categories,

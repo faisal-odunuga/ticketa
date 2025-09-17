@@ -3,7 +3,7 @@ import Card from "@/components/ui/card/Card";
 
 const Stats: React.FC<StatProp> = ({ data }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {data.map(({ title, desc, Icon }, index) => (
         <Card key={index}>
           <div className="p-6">

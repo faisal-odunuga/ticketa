@@ -3,16 +3,16 @@ import Button from "@/components/ui/button/Button";
 import Loader from "@/components/ui/loader/Loader";
 import { TicketProps } from "@/hooks/definitions";
 import { getUserTicketById } from "@/services/apiTicket";
-import { getFormattedDate, getTime, SentenseCase } from "@/utils/helpers";
+import { getFormattedDate, getTime } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { HiOutlineMail } from "react-icons/hi";
 import { MdOutlineFileDownload } from "react-icons/md";
 
 const statusColor = {
-  pending: "bg-yellow-100 text-yellow-800",
-  success: "bg-green-100 text-green-800",
-  failed: "bg-red-100 text-red-800",
+  verified: "bg-green-100 text-green-800",
+  used: "bg-red-100 text-red-800",
 };
 
 const TicketPDF = () => {
@@ -29,7 +29,6 @@ const TicketPDF = () => {
         <Loader />
       </div>
     );
-  console.log(ticket);
 
   return (
     <main className="flex flex-col gap-10 items-center justify-center min-h-screen p-4 md:p-10">
@@ -47,10 +46,10 @@ const TicketPDF = () => {
               </h3>
               <div
                 className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
-                  statusColor[ticket.status.toLowerCase()]
+                  statusColor[ticket.is_verified ? "verified" : "used"]
                 }`}
               >
-                {SentenseCase(ticket.status)}
+                {ticket.is_verified ? "Verified" : "Not Verified"}
               </div>
             </div>
             <div className="text-right">
@@ -118,8 +117,15 @@ const TicketPDF = () => {
         <div className="bg-gray-50 p-6 flex flex-col items-center justify-center border-l">
           <div className="w-52 h-52 bg-white border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center mb-3">
             <div className="text-gray-400 text-center">
-              <div className="w-32 h-32 bg-gray-200 rounded mb-2 mx-auto"></div>
-              <p className="text-xs">QR Code</p>
+              <div className="w-48 h-48 bg-gray-200 rounded mx-auto flex items-center justify-center">
+                <Image
+                  src={ticket?.qr_code}
+                  alt="QR Code"
+                  width={192} // adjust as needed
+                  height={192} // adjust as needed
+                  className="object-contain"
+                />
+              </div>
             </div>
           </div>
           <p className="text-xs text-gray-600 text-center">

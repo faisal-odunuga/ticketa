@@ -107,3 +107,32 @@ export const createEvent = async (newEvent: NewEventFormValues) => {
 
   return data;
 };
+
+export async function getEventTickets(eventId: string) {
+  const { data: tickets, error } = await supabase
+    .from("tickets")
+    .select("*")
+    .eq("event_id", eventId);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Tickets could not be loaded");
+  }
+  return tickets;
+}
+
+export async function verifyTicket(ticketId: string) {
+  const { data: updatedTicket, error: updateError } = await supabase
+    .from("tickets")
+    .update({ is_verified: true })
+    .eq("ticket_id", ticketId)
+    .select()
+    .single();
+
+  if (updateError || !updatedTicket) {
+    console.error(updateError);
+    throw new Error("Ticket could not be verified");
+  }
+
+  return updatedTicket;
+}

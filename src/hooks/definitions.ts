@@ -78,8 +78,9 @@ export interface EventCardProps {
 
 export interface TicketProps {
   ticket_id?: string;
+  event_id?: string;
   qr_code?: string;
-  status?: string;
+  is_verified?: boolean;
   ticket_number?: string;
   ticket_type?: string;
   price?: number;

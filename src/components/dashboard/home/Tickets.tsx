@@ -6,11 +6,11 @@ import { useTickets } from "@/state/TicketInfoProvider";
 const TicketsPage = () => {
   const { tickets, isLoading, error, ticketCount, refetch } = useTickets();
 
-  if (!isLoading) {
+  if (isLoading) {
     return <Loader />;
   }
   if (error) {
-    return <Loader />;
+    return <div>Error loading tickets: {error.message}</div>;
   }
   return (
     <section>

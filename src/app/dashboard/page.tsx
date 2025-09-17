@@ -1,9 +1,9 @@
 "use client";
-import Tickets from "@/components/dashboard/home/Tickets";
 import React from "react";
 import TicketStats from "@/components/dashboard/home/TicketStats";
 import { useTickets } from "@/state/TicketInfoProvider";
 import Loader from "@/components/ui/loader/Loader";
+import TicketsPage from "@/components/dashboard/home/Tickets";
 
 const DashboardHome = () => {
   const { authLoading, isLoading } = useTickets();
@@ -13,7 +13,7 @@ const DashboardHome = () => {
   return (
     <div>
       <TicketStats />
-      <Tickets />
+      <TicketsPage />
     </div>
   );
 };
