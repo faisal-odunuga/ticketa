@@ -11,7 +11,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import { MdOutlineFileDownload } from "react-icons/md";
 
 const statusColor = {
-  verified: "bg-green-100 text-green-800",
+  valid: "bg-green-100 text-green-800",
   used: "bg-red-100 text-red-800",
 };
 
@@ -32,12 +32,7 @@ const TicketPDF = () => {
 
   return (
     <main className="flex flex-col gap-10 items-center justify-center min-h-screen p-4 md:p-10">
-      <div className="w-full mx-auto flex flex-col border-4 max-w-3xl h-full relative">
-        <div className="absolute bottom-2 right-4">
-          <h1 className="font-bold text-blue-600 text-sm">
-            Powered by Ticketa
-          </h1>
-        </div>
+      <div className="w-full mx-auto flex flex-col border-4 max-w-3xl h-full relative p-4">
         <div className="flex-1 p-6">
           <div className="flex items-start justify-between mb-4">
             <div>
@@ -46,10 +41,10 @@ const TicketPDF = () => {
               </h3>
               <div
                 className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
-                  statusColor[ticket.is_verified ? "verified" : "used"]
+                  statusColor[ticket.is_verified ? "used" : "valid"]
                 }`}
               >
-                {ticket.is_verified ? "Verified" : "Not Verified"}
+                {ticket.is_verified ? "Used" : "Valid"}
               </div>
             </div>
             <div className="text-right">
@@ -131,6 +126,12 @@ const TicketPDF = () => {
           <p className="text-xs text-gray-600 text-center">
             Show this code at the event entrance
           </p>
+        </div>
+
+        <div className="absolute bottom-2 right-4">
+          <h1 className="font-bold text-blue-600 text-sm">
+            Powered by Ticketa
+          </h1>
         </div>
       </div>
 

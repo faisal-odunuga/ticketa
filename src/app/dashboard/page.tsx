@@ -11,7 +11,7 @@ const DashboardHome = () => {
     return <Loader />;
   }
   return (
-    <div>
+    <div className="space-y-6">
       <TicketStats />
       <TicketsPage />
     </div>

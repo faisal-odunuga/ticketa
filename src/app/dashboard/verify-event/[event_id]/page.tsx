@@ -1,17 +1,15 @@
 "use client";
-import { TicketProps } from "@/hooks/definitions";
 import { getEventTickets, verifyTicket } from "@/services/apiEvents";
 import { useAuth } from "@/state/AuthProvider";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-// import { useVerifyTicket } from "@/hooks/useVerifyTicket"; // 👈 import hook
 import React from "react";
 import { toast } from "react-toastify";
 
 const VerifyTicket = () => {
   const { user, loading: authLoading } = useAuth();
   const { event_id } = useParams();
-  //   const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   const {
     data: tickets = [],
@@ -26,16 +24,8 @@ const VerifyTicket = () => {
   const { mutate: verify, isPending } = useMutation({
     mutationFn: (ticketId: string) => verifyTicket(ticketId),
     onSuccess: () => {
-      // update cached tickets if already fetched
-      // Alternatively, you can directly update the local tickets state if needed
-      // setTickets((prevTickets) =>
-      //   prevTickets.map((ticket) =>
-      //     ticket.ticket_id === data.ticket_id
-      //       ? { ...ticket, is_verified: true }
-      //       : ticket
-      //   )
-      // );
       toast.success("Ticket verified successfully");
+      queryClient.invalidateQueries({ queryKey: ["event-tickets"] });
     },
     onError: (error) => {
       toast.error("Verification failed: " + error.message);

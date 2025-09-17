@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const statusColor = {
-  verified: "bg-green-100 text-green-800",
+  valid: "bg-green-100 text-green-800",
   used: "bg-red-100 text-red-800",
 };
 const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
@@ -21,15 +21,15 @@ const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
             </h3>
             <div
               className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
-                statusColor[ticket.is_verified ? "verified" : "used"]
+                statusColor[ticket.is_verified ? "used" : "valid"]
               }`}
             >
-              {ticket.is_verified ? "Verified" : "Not Verified"}
+              {ticket.is_verified ? "Used" : "Valid"}
             </div>
           </div>
           <div className="text-right">
             <p className="text-2xl font-bold text-blue-600">
-              {ticket.price.toLocaleString()}
+              ₦{ticket.price.toLocaleString()}
             </p>
           </div>
         </div>
@@ -67,7 +67,7 @@ const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
 
           <div className="flex items-center space-x-3">
             <div className="h-4 w-4 bg-gray-400 rounded text-xs flex items-center justify-center text-white">
-              #
+              ₦
             </div>
             <div>
               <p className="font-medium text-gray-900">Ticket Number</p>
@@ -94,7 +94,9 @@ const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
             hasIcon={<HiOutlineMail />}
             filled={false}
           />
-          <Button btnText=" View Event Details" />
+          <Link href={`/event-details/${ticket.event.event_id}`}>
+            <Button btnText=" View Event Details" />
+          </Link>
         </div>
       </div>
 
