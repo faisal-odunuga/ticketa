@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 const VerifyTicket = () => {
   const { user, loading: authLoading } = useAuth();
   const { event_id } = useParams();
-  const queryClient = useQueryClient();
+  //   const queryClient = useQueryClient();
 
   const {
     data: tickets = [],
@@ -25,7 +25,7 @@ const VerifyTicket = () => {
 
   const { mutate: verify, isPending } = useMutation({
     mutationFn: (ticketId: string) => verifyTicket(ticketId),
-    onSuccess: (data) => {
+    onSuccess: () => {
       // update cached tickets if already fetched
       // Alternatively, you can directly update the local tickets state if needed
       // setTickets((prevTickets) =>
@@ -38,7 +38,7 @@ const VerifyTicket = () => {
       toast.success("Ticket verified successfully");
     },
     onError: (error) => {
-      console.error("Verification failed:", error);
+      toast.error("Verification failed: " + error.message);
     },
   }); // 👈 use mutation
 
