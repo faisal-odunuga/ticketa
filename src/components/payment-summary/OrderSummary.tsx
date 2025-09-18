@@ -44,7 +44,7 @@ export default function OrderSummary({ event }: EventInfo) {
   const name = watch("fullName");
   const phone = watch("number");
 
-  const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+  const publicKey = process.env.PAYSTACK_PUBLIC_KEY;
   const selectedTicket = useMemo(() => {
     return event?.ticketTypes.find((t) => t.name === ticket_type);
   }, [ticket_type, event]);
