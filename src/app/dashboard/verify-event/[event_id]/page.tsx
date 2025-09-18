@@ -33,6 +33,7 @@ const VerifyTicket = () => {
   }); // 👈 use mutation
 
   if (isLoading) return <div>Loading tickets...</div>;
+  if (error) return <div>Error loading tickets</div>;
 
   return (
     <section className="p-8 bg-white rounded-2xl shadow">
