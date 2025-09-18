@@ -77,7 +77,7 @@ export default function OrderSummary({ event }: EventInfo) {
 
   const initializePayment = usePaystackPayment(config);
 
-  const onSubmit: SubmitHandler<CustomerInfo> = (data) => {
+  const onSubmit: SubmitHandler<CustomerInfo> = async (data) => {
     const payload = {
       ...data,
       price: selectedTicket?.price || 0,
@@ -88,27 +88,38 @@ export default function OrderSummary({ event }: EventInfo) {
       user_phone_number: phone.toString(),
     };
 
-    if (isValid) {
-      initializePayment({
-        onSuccess: async (reference: PaystackResponse) => {
-          try {
-            const ticket = await purchaseTicket(
-              payload,
-              reference,
-              selectedTicket,
-              event
-            );
-            router.push(
-              `/payment-status${reference.redirecturl}&ticketId=${ticket.ticket_id}`
-            );
-          } catch (error) {
-            console.error("Error creating ticket:", error);
-          }
-        },
+    if (!isValid) return;
 
-        onClose,
-      });
+    // ✅ FREE TICKET FLOW
+    if (selectedTicket?.price === 0) {
+      try {
+        const ticket = await purchaseTicket(payload, selectedTicket, event);
+        // You can choose either download page directly:
+        router.push(`/download-ticket/${ticket.ticket_id}`);
+        // or if you still want a "payment-status" page for consistency:
+        // router.push(`/payment-status?ticketId=${ticket.ticket_id}&status=free`);
+      } catch (error) {
+        console.error("Error creating free ticket:", error);
+        toast.error("Could not create free ticket.");
+      }
+      return; // ⬅️ IMPORTANT: stop here so Paystack is not called
     }
+
+    // ✅ PAID TICKET FLOW
+    initializePayment({
+      onSuccess: async (reference: PaystackResponse) => {
+        try {
+          const ticket = await purchaseTicket(payload, selectedTicket, event);
+          router.push(
+            `/payment-status?trxref=${reference.reference}&reference=${reference.reference}&ticketId=${ticket.ticket_id}`
+          );
+        } catch (error) {
+          console.error("Error creating ticket:", error);
+          toast.error("Could not finalize ticket purchase.");
+        }
+      },
+      onClose,
+    });
   };
 
   return (
@@ -189,7 +200,10 @@ export default function OrderSummary({ event }: EventInfo) {
                           {SentenseCase(ticket_type)}
                         </h1>
                         <p className="text-gray-500 text-sm">
-                          ₦{selectedTicket.price.toLocaleString()} per ticket
+                          {/* ₦{selectedTicket.price.toLocaleString()} per ticket */}
+                          {selectedTicket.price === 0
+                            ? "Free"
+                            : `₦${selectedTicket.price.toLocaleString()} per ticket`}
                         </p>
                       </div>
                     </div>
@@ -306,7 +320,11 @@ export default function OrderSummary({ event }: EventInfo) {
               <div className="p-6 pt-0 space-y-3">
                 <div className="flex justify-between">
                   <span>{SentenseCase(ticket_type)}</span>
-                  <span>₦{selectedTicket?.price.toLocaleString() || 0}</span>
+                  <span>
+                    {selectedTicket?.price === 0
+                      ? "Free"
+                      : `₦${selectedTicket?.price.toLocaleString()}`}
+                  </span>
                 </div>
 
                 <div className="flex justify-between text-sm text-gray-600">
@@ -317,7 +335,11 @@ export default function OrderSummary({ event }: EventInfo) {
                 <div className="border-t pt-3">
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Total</span>
-                    <span>₦{selectedTicket?.price.toLocaleString() || 0}</span>
+                    <span>
+                      {selectedTicket?.price === 0
+                        ? "Free"
+                        : `₦${selectedTicket?.price.toLocaleString()}`}
+                    </span>
                   </div>
                 </div>
 

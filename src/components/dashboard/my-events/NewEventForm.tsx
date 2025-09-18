@@ -15,7 +15,7 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
     useForm<NewEventFormValues>({
       defaultValues: {
         ticketTypes: [
-          { name: "Regular", price: 0, sold_tickets: 0, total_tickets: 0 },
+          { name: "Regular", price: 0, sold_tickets: 0, total_tickets: 1 },
         ],
       },
     });
@@ -38,6 +38,16 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
   });
 
   const onSubmit = (data: NewEventFormValues) => {
+    // Ensure all ticket types have available tickets
+    const allValidTickets = data.ticketTypes.every(
+      (ticket) => ticket.total_tickets > 0
+    );
+
+    if (!allValidTickets) {
+      toast.error("Each ticket type must have at least 1 available ticket");
+      return;
+    }
+
     mutation.mutate(data);
   };
 
@@ -154,7 +164,10 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
                       type="text"
                       placeholder="Regular / VIP"
                       label="Type"
-                      {...register(`ticketTypes.${index}.name` as const)}
+                      required
+                      {...register(`ticketTypes.${index}.name` as const, {
+                        required: "Ticket type is required",
+                      })}
                     />
 
                     <FormInput
@@ -163,21 +176,31 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
                       min="0"
                       placeholder="0.00"
                       label="Price"
+                      required
                       {...register(`ticketTypes.${index}.price` as const, {
                         valueAsNumber: true,
+                        min: {
+                          value: 0,
+                          message: "Price cannot be negative",
+                        },
                       })}
                     />
 
                     <FormInput
                       id={`ticketTypes.${index}.total_tickets`}
                       type="number"
-                      min="0"
+                      min="1"
                       placeholder="100"
                       label="Available"
+                      required
                       {...register(
                         `ticketTypes.${index}.total_tickets` as const,
                         {
                           valueAsNumber: true,
+                          min: {
+                            value: 1,
+                            message: "Available tickets must be at least 1",
+                          },
                         }
                       )}
                     />
@@ -197,7 +220,7 @@ const NewEventForm = ({ setShowForm }: ToggleFormProps) => {
                   type="button"
                   btnText="+ Add Ticket Type"
                   onClick={() =>
-                    append({ name: "", price: 0, total_tickets: 0 })
+                    append({ name: "", price: 0, total_tickets: 1 })
                   }
                 />
               </div>

@@ -49,7 +49,9 @@ const TicketPDF = () => {
             </div>
             <div className="text-right">
               <p className="text-2xl font-bold text-blue-600">
-                ₦{ticket.price.toLocaleString()}
+                {ticket.price === 0
+                  ? "Free"
+                  : `₦${ticket.price.toLocaleString()}`}
               </p>
             </div>
           </div>
@@ -114,7 +116,7 @@ const TicketPDF = () => {
             <div className="text-gray-400 text-center">
               <div className="w-48 h-48 bg-gray-200 rounded mx-auto flex items-center justify-center">
                 <Image
-                  src={ticket?.qr_code}
+                  src={ticket?.qr_code || null}
                   alt="QR Code"
                   width={192} // adjust as needed
                   height={192} // adjust as needed

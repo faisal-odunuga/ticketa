@@ -29,7 +29,9 @@ const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
           </div>
           <div className="text-right">
             <p className="text-2xl font-bold text-blue-600">
-              ₦{ticket.price.toLocaleString()}
+              {ticket.price === 0
+                ? "Free"
+                : `₦${ticket.price.toLocaleString()}`}
             </p>
           </div>
         </div>
@@ -105,7 +107,7 @@ const TicketCard = ({ ticket }: { ticket: TicketProps }) => {
           <div className="text-gray-400 text-center">
             <div className="w-30 h-30 bg-gray-200 rounded mx-auto">
               <Image
-                src={ticket?.qr_code}
+                src={ticket?.qr_code || null}
                 alt="QR Code"
                 width={100}
                 height={100}
