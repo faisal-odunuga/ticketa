@@ -1,15 +1,9 @@
-"use client";
+'use client';
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
-import { useRouter } from "next/navigation";
-import supabase from "@/lib/supabase";
-import { UserWithProfile } from "@/hooks/definitions";
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
+import supabase from '@/lib/supabase';
+import { UserWithProfile } from '@/hooks/definitions';
 
 type AuthContextType = {
   user: UserWithProfile | null;
@@ -26,10 +20,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   const fetchUser = async () => {
-    setLoading(true);
     try {
-      const { data: sessionData, error: sessionError } =
-        await supabase.auth.getUser();
+      const { data: sessionData, error: sessionError } = await supabase.auth.getUser();
 
       if (sessionError || !sessionData.user) {
         setUser(null);
@@ -37,9 +29,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("user_id", sessionData.user.id)
+        .from('profiles')
+        .select('*')
+        .eq('user_id', sessionData.user.id)
         .single();
 
       if (profileError || !profile) {
@@ -49,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser({ ...sessionData.user, profile });
       }
     } catch (err) {
-      console.error("Error fetching user:", err);
+      console.error('Error fetching user:', err);
       setUser(null);
     } finally {
       setLoading(false);
@@ -68,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     await supabase.auth.signOut();
-    router.push("/login");
+    router.push('/login');
   };
 
   return (
@@ -81,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 }
